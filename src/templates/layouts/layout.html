@@ -17,12 +17,12 @@
             <div class="justify-around w-60 items-center flex space-x-9 text-4xl text-black">
                 <i class="fas fa-male hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
                 <i class="fas fa-shield-alt hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
-                <i class="fas fa-futbol hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
+                <i class="fas fa-futbol transition-all duration-200 hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg  "></i>
             </div>
         </div>
 
         <!-- Derecha: botones y estrellas -->
-        <div class="border-2 h-16  flex items-center justify-between space-x-4 text-black">
+        <div class=" h-16  flex items-center justify-between space-x-4 text-black">
             <button class="font-semibold border-2 border-red-600 bg-red-600 text-white px-3 py-3 rounded-md text-sm flex items-center space-x-1 transition-all duration-200 hover:text-red-600 hover:bg-white">
                 <i class="fa-solid fa-address-card text-xl"></i>
                 <span class="text-lg">Registrarse</span>
@@ -31,9 +31,20 @@
                 <i class="fas fa-sign-in-alt text-xl"></i>
                 <span>Iniciar sesión</span>
             </button>
-
-            <i class="fas fa-star text-xl" class="text-3xl"></i>
-            <i class="fas fa-cog text-xl"></i>
+            
+            <div class="relative group inline-block">
+                <i class="fas fa-star text-2xl"></i>
+                <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                    Favoritos
+                </div>
+            </div>
+            <div class="relative group inline-block">
+                <i class="fas fa-cog text-2xl"></i>
+                <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                    Ajustes
+                </div>
+            </div>
+            
         </div>
     </header>
 </html>
