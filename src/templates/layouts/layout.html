@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+</head>
+<body>
+
+    <header class="bg-white border-t-4 w-screen px-6 py-4 flex justify-around items-center shadow-md">
+    <!-- Izquierda: logo y secciones -->
+        <div class="flex-none w-2/6 justify-between flex items-center space-x-6">
+            <span class="text-red-600 font-bold text-2xl">TONISCORE</span>
+
+            <div class="justify-around w-60 items-center flex space-x-9 text-4xl text-black">
+                <i class="fas fa-male hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
+                <i class="fas fa-shield-alt hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
+                <i class="fas fa-futbol hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
+            </div>
+        </div>
+
+        <!-- Derecha: botones y estrellas -->
+        <div class="border-2 h-16  flex items-center justify-between space-x-4 text-black">
+            <button class="font-semibold border-2 border-red-600 bg-red-600 text-white px-3 py-3 rounded-md text-sm flex items-center space-x-1 transition-all duration-200 hover:text-red-600 hover:bg-white">
+                <i class="fa-solid fa-address-card text-xl"></i>
+                <span class="text-lg">Registrarse</span>
+            </button>
+            <button class="font-semibold border-2 border-red-600 bg-red-600 text-white px-3 py-3 rounded-md text-sm flex items-center space-x-1 transition-all duration-200 hover:text-red-600 hover:bg-white">
+                <i class="fas fa-sign-in-alt text-xl"></i>
+                <span>Iniciar sesión</span>
+            </button>
+
+            <i class="fas fa-star text-xl" class="text-3xl"></i>
+            <i class="fas fa-cog text-xl"></i>
+        </div>
+    </header>
+</html>
