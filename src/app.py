@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_mysqldb import MySQL
-from src.routes.players import players_bp
+from routes.players import players_bp
 
 app = Flask(__name__)
 
