@@ -10,15 +10,30 @@
 </head>
 <body class="h-screen w-screen overflow-x-hidden">
 
-    <header class="bg-white h-26 z-10 relative border-t-4 w-screen px-6 py-4 flex justify-around items-center shadow-md">
+    <header class="bg-white h-20 z-10 relative border-t-4 w-screen px-6 py-4 flex justify-around items-center shadow-md">
     <!-- Izquierda: logo y secciones -->
         <div class="flex-none w-2/6 justify-between flex items-center space-x-6">
             <span class="text-red-600 font-bold text-2xl">TONISCORE</span>
 
             <div class="justify-around w-60 items-center flex space-x-9 text-4xl text-black">
-                <i class="fas fa-male hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
-                <i class="fas fa-shield-alt hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
-                <i class="fas fa-futbol transition-all duration-200 hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg  "></i>
+                <div class=" cursor-pointer relative group inline-block">
+                    <i class="fas fa-male cursor-pointer hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
+                    <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                        Jugadores
+                    </div>
+                </div>
+                <div class=" cursor-pointer relative group inline-block">
+                    <i class="fas fa-shield-alt cursor-pointer hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
+                    <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                        Equipos
+                    </div>
+                </div>
+                <div class=" cursor-pointer relative group inline-block">
+                    <i class="fas fa-futbol transition-all cursor-pointer duration-200 hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg "></i>
+                    <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                        partidos
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -33,13 +48,13 @@
                 <span>Iniciar sesión</span>
             </button>
             
-            <div class="relative group inline-block">
+            <div class=" cursor-pointer relative group inline-block">
                 <i class="fas fa-star text-2xl"></i>
-                <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block  bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
                     Favoritos
                 </div>
             </div>
-            <div class="relative group inline-block">
+            <div class="cursor-pointer relative group inline-block">
                 <i class="fas fa-cog text-2xl"></i>
                 <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
                     Ajustes

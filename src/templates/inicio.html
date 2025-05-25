@@ -6,31 +6,43 @@
     <div 
         x-data="carousel()" 
         x-init="start()" 
-        class="absolute top-24 bottom-0 left-0 right-0 z-0">
+        class="absolute top-20 bottom-0 left-0 right-0 z-0">
         <template x-for="(image, index) in images" :key="index">
             <div 
-                x-show="currentIndex === index" 
-                class="absolute inset-0 transition-opacity duration-1000"
-                :style="`background-image: url(${image}); background-size: cover; background-position: center; background-repeat: no-repeat;`">
+                class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
+                :class="currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'"
+                :style="`background-image: url(${image});`">
             </div>
         </template>
-        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="absolute inset-0 z-20 bg-black opacity-80"></div>
     </div>
+    <div class="flex flex-col w-screen items-center justify-evenly relative z-30">
+        <div class="border-3 border-pink-600 flex w-screen z-10 justify-center mt-20">
+            <img src="{{ url_for('static', filename='img/laliga_logo.png') }}" alt="LaLiga Logo" class="border-3 border-pink-600 z-10 w-44" />
+        </div>
+        <div 
+            class="w-40 relative z-30 mx-auto mt-24 max-w-48 bg-white text-black rounded-lg py-2 flex flex-col items-center shadow-lg hover:bg-red-600 hover:text-white transition-all duration-300 cursor-pointer">
+
+        <!-- Texto o contenido dentro del contenedor -->
+            <h1 class="text-2xl font-bold mb-2 text-center">Comenzar</h1>
+        </div>
+    </div>
+    
     <script>
         function carousel() {
-            return {
-                images: [
-                    "{{ url_for('static', filename='img/carrusel_1.webP') }}",
-                    "{{ url_for('static', filename='img/carrusel_2.webP') }}",
-                    "{{ url_for('static', filename='img/carrusel_3.webP') }}"
-                ],
-                currentIndex: 0,
-                start() {
-                    setInterval(() => {
-                        this.currentIndex = (this.currentIndex + 1) % this.images.length;
-                    }, 4000); // cambia cada 4 segundos
-                }
-            };
+        return {
+            images: [
+                "{{ url_for('static', filename='img/carrusel_1.webP') }}",
+                "{{ url_for('static', filename='img/carrusel_2.webP') }}",
+                "{{ url_for('static', filename='img/carrusel_3.webP') }}"
+            ],
+            currentIndex: 0,
+            start() {
+                setInterval(() => {
+                    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                }, 6000); // cambia cada 6 segundos
+            }
+        };
         }
     </script>
 {% endblock %}
