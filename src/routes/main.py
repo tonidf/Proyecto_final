@@ -9,4 +9,4 @@ def inicio():
 
 @main_bp.route('/general', methods=['GET', 'POST'])
 def general():
-    pass
+    return render_template('general.html')
