@@ -1,21 +1,16 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_mysqldb import MySQL
-from routes.players import players_bp
+from routes import register_blueprints
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object("config")
 
-# Agrupacion de blueprints
-app.register_blueprint(players_bp, url_prefix='/players')
-
-
-# Conexión a la base de datos
-db = MySQL(app)
-
-@app.route('/')
-def index():
-    return render_template('inicio.html')
+    register_blueprints(app)
+    return app
 
 
 
 if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True)
