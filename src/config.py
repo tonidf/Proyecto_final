@@ -22,4 +22,4 @@ class productionConfig(Config):
 config = {
     "dev" : DevelopmentConfig,
     "produ" : productionConfig
-}
+}   

@@ -6,8 +6,8 @@
 <div class="relative min-h-screen flex flex-col items-center pt-10 px-4">
 
     <!-- Imagen de fondo -->
-    <div class="absolute inset-0 bg-cover bg-center z-0"
-        style="background-image: url('{{ url_for('static', filename='img/carrusel_1.webP') }}');">
+    <div class="absolute inset-0 bg-cover bg-center z-0">
+        <img class="w-full h-full object-cover" src="{{ url_for('static', filename='img/carrusel_1.webP') }}" alt="">
     </div>
 
     <!-- Capa oscura -->
