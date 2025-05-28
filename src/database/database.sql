@@ -1,23 +1,28 @@
-CREATE DATABASE toniscore;
+-- Crear la base de datos
+CREATE DATABASE bgykwxogdco1xjrwbavt;
 
-
-USE toniscore;
+-- Usar la base de datos
+USE bgykwxogdco1xjrwbavt;
 
 -- Crear la tabla de equipos
 CREATE TABLE equipos (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    api_id INT UNIQUE NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     pais VARCHAR(100) NOT NULL,
-    codigo VARCHAR(10) NOT NULL,
-    logo VARCHAR(255) NOT NULL,
-    league_id INT NOT NULL
+    codigo VARCHAR(10),
+    logo VARCHAR(255),
+    league_id INT NOT NULL,
+    founded INT,
+    venue_name VARCHAR(150),
+    venue_capacity INT
 );
 
 -- Crear la tabla de usuarios
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_completo VARCHAR(100) NOT NULL,
-    contrasena VARCHAR(255) NOT NULL, 
+    contrasena VARCHAR(255) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE
 );
 

@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, f
 from flask_mysqldb import MySQL
 from routes import register_routes
 from config import config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
