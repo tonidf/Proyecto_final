@@ -1,11 +1,9 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_mysqldb import MySQL
-from routes import register_routes
-from config import config
-from dotenv import load_dotenv
-from extensions import mysql
+from routes import register_routes  # Añadir "scr." delante del from para ejecutar el script de insertar_equipos.py
+from config import config # Añadir "scr." delante del from para ejecutar el script de insertar_equipos.py
+from extensions import mysql # Añadir "scr." delante del from para ejecutar el script de insertar_equipos.py
 
-load_dotenv()
 
 def create_app():
     app = Flask(__name__)
