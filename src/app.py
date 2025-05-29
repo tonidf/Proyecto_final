@@ -3,12 +3,15 @@ from flask_mysqldb import MySQL
 from routes import register_routes
 from config import config
 from dotenv import load_dotenv
+from extensions import mysql
 
 load_dotenv()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(config["dev"])
+
+    mysql.init_app(app)
 
     register_routes(app)
     return app

@@ -1,5 +1,7 @@
 import requests
 import os
+from src.extensions import mysql
+from flask import current_app
 
 headers = {
     'x-apisports-key': os.getenv('API_KEY')   # Reemplaza con tu key real
@@ -31,7 +33,12 @@ for item in data['response']:
         venue.get('capacity') or 0      # capacidad
     )
     equipos_sql.append(valores)
-for e in equipos_sql:
-    sql = f"""INSERT INTO equipos (api_id, nombre, pais, codigo, logo, league_id, founded, venue_name, venue_capacity)
-            VALUES ({e[0]}, '{e[1]}', '{e[2]}', '{e[3]}', '{e[4]}', {e[5]}, {e[6]}, '{e[7]}', {e[8]});"""
-    print(sql)
+with current_app.app_context():
+    cursor = mysql.connection.cursor()
+    for e in equipos_sql:
+        sql = f"""INSERT INTO equipos (api_id, nombre, pais, codigo, logo, league_id, founded, venue_name, venue_capacity)
+                VALUES ({e[0]}, '{e[1]}', '{e[2]}', '{e[3]}', '{e[4]}', {e[5]}, {e[6]}, '{e[7]}', {e[8]});"""
+        cursor.execute(sql)
+        print(sql)
+    mysql.connection.commit()
+    cursor.close()
