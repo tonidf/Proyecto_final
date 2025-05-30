@@ -1,6 +1,6 @@
-from flask import flash, request
+from flask import flash
 from user import User
-from extensions import mysql, login_manager
+from extensions import mysql
 
 
 class ModelUser:
@@ -17,7 +17,7 @@ class ModelUser:
                 nombre = data[1]
                 email = data[2]
                 
-                user = User(id, nombre, None, email)
+                user = User(id, nombre, email, None)
                 return user
             return None
         except Exception as e:
