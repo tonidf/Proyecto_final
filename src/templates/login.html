@@ -1,0 +1,24 @@
+{% extends './layouts/layout.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+    
+        <div>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}
+        </div>
+
+        <div>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
+        </div>
+
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}

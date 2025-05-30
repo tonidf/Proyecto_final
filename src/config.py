@@ -2,6 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY')
+    JWT_KEY = os.getenv('JWT_KEY')
 
 class DevelopmentConfig(Config):
     DEBUG = True

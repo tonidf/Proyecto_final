@@ -1,14 +1,17 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required
-from models.user import User  # Clase que hereda de UserMixin
+from models.user import User 
 from models.entities.modelUser import ModelUser  # Acceso a la lógica DB
 from werkzeug.security import check_password_hash
+from forms import LoginForm, RegisterForm  # Formularios para login y registro
 
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    login_form = LoginForm()
+    
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -20,7 +23,7 @@ def login():
         else:
             flash("Credenciales incorrectas")
 
-    return render_template('auth/login.html')
+    return render_template('auth/login.html', form=login_form)
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():

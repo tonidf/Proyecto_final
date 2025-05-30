@@ -1,5 +1,5 @@
 from flask import flash
-from user import User
+from models.user import User
 from extensions import mysql
 
 
@@ -26,7 +26,7 @@ class ModelUser:
             return None
     
     @classmethod
-    def login_user(cls, email, password):
+    def Login_user(cls, email, password):
         try:
             cur = mysql.connection.cursor()
             cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))

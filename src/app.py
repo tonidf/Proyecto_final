@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, f
 from routes import register_routes  # Añadir "scr." delante del from para ejecutar el script de insertar_equipos.py
 from config import config # Añadir "scr." delante del from para ejecutar el script de insertar_equipos.py
 from extensions import mysql, login_manager # Añadir "scr." delante del from para ejecutar el script de insertar_equipos.py
-from .models.entities.modelUser import ModelUser  # Importar el modelo de usuario
+from models.entities.modelUser import ModelUser  # Importar el modelo de usuario
 from flask_login import LoginManager
 
 
