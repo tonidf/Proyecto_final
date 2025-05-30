@@ -1,16 +1,18 @@
 from flask_login import UserMixin
 from extensions import mysql, login_manager
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(UserMixin):
-    def __init__(self, id, username):
+    def __init__(self, id, name, email, password):
         self.id = id
-        self.username = username
+        self.username = name
+        self.email = email
+        self.password = password
 
-@login_manager.user_loader
-def load_user(user_id):
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT id, username FROM usuarios WHERE id = %s", (user_id,))
-    data = cursor.fetchone()
-    if data:
-        return User(id=data[0], username=data[1])
-    return None
+    def set_password(self, password):
+        return generate_password_hash(password)
+    
+    def check_password(self, password, hashed_pass):
+        return check_password_hash(hashed_pass, password)
+
+
