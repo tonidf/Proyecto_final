@@ -59,15 +59,24 @@ class ModelUser:
             cur = mysql.connection.cursor()
             cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
             existing_user = cur.fetchone()
+            
             if existing_user:
                 flash("El email ya está registrado", "error")
-                return False
+                return None
+
             hashed_pass = User.set_password(User, password)
-            cur.execute("INSERT INTO usuarios (nombre, email, password) VALUES (%s, %s, %s)", (nombre, email, hashed_pass))
+            cur.execute(
+                "INSERT INTO usuarios (nombre, email, password) VALUES (%s, %s, %s)",
+                (nombre, email, hashed_pass)
+            )
             mysql.connection.commit()
-            flash("Usuario registrado correctamente", "success")
-            return True
+
+            user_id = cur.lastrowid
+            cur.close()
+
+            return User(id=user_id, nombre=nombre, email=email, password=hashed_pass)
+
         except Exception as e:
             print(e)
             flash("Error al registrar el usuario", "error")
-            return False
+            return None
