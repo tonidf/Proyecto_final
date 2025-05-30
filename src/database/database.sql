@@ -27,11 +27,42 @@ CREATE TABLE usuarios (
 );
 
 -- Crear la tabla intermedia favoritos
-CREATE TABLE favoritos (
+CREATE TABLE equipos_fav (
     id_usuario INT NOT NULL,
     id_equipo INT NOT NULL,
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id_usuario, id_equipo),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (id_equipo) REFERENCES equipos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE jugadores (
+    id INTEGER PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    posicion VARCHAR(50),
+    equipo_id INTEGER
+);
+
+CREATE TABLE partidos (
+    id INTEGER PRIMARY KEY,
+    equipo_local_id INTEGER NOT NULL,
+    equipo_visitante_id INTEGER NOT NULL,
+    fecha DATETIME,
+    estadio VARCHAR(100)
+);
+
+CREATE TABLE partidos_fav (
+    usuario_id INTEGER NOT NULL,
+    partido_id INTEGER NOT NULL,
+    PRIMARY KEY (usuario_id, partido_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (partido_id) REFERENCES partidos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE jugadores_fav (
+    usuario_id INTEGER NOT NULL,
+    jugador_id INTEGER NOT NULL,
+    PRIMARY KEY (usuario_id, jugador_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (jugador_id) REFERENCES jugadores(id) ON DELETE CASCADE
 );
