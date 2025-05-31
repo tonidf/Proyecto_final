@@ -4,21 +4,34 @@
 
 {% block body %}
 
-    <form method="POST">
-        {{ form.hidden_tag() }}
-    
-        <div>
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}
-        </div>
+    <div class="flex-grow flex justify-center items-center bg-gray-300 min-h-[calc(100vh-5rem)]">
+    <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm text-center">
+        <h2 class="text-2xl font-bold text-red-600 mb-6">INICIAR SESIÓN</h2>
+        <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
 
-        <div>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
-        </div>
+            <div class="flex flex-col items-center mb-4 text-left">
+                {{ form.email.label(class="block font-semibold mb-1") }}
+                {{ form.email(class="w-full px-3 py-2 border border-gray-300 rounded placeholder-gray-400", placeholder="Example@example.com") }}
+                {% for error in form.email.errors %}
+                    <p class="text-red-500 text-sm">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-        <div>
-            {{ form.submit() }}
-        </div>
-    </form>
+            <div class="flex flex-col items-center mb-6 text-left">
+                {{ form.password.label(class="block font-semibold mb-1") }}
+                {{ form.password(class="w-full px-3 py-2 border border-gray-300 rounded placeholder-gray-400", placeholder="password...") }}
+                {% for error in form.password.errors %}
+                    <p class="text-red-500 text-sm">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ form.submit(class="w-full bg-red-600 text-white font-semibold py-2 rounded hover:bg-red-700 transition") }}
+                <span>No tienes cuenta? <a href="#">Registrate</a></span>
+            </div>
+            
+        </form>
+    </div>
+</div>
 {% endblock %}

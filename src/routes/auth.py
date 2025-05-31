@@ -3,12 +3,12 @@ from flask_login import login_user, logout_user, login_required
 from models.user import User 
 from models.entities.modelUser import ModelUser  # Acceso a la lógica DB
 from werkzeug.security import check_password_hash
-from forms import LoginForm, RegisterForm  # Formularios para login y registro
+from forms.login_form import LoginForm # Formularios para login y registro
 
 
-auth = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__)
 
-@auth.route('/login', methods=['GET', 'POST'])
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
     
@@ -23,9 +23,9 @@ def login():
         else:
             flash("Credenciales incorrectas")
 
-    return render_template('auth/login.html', form=login_form)
+    return render_template('login.html', form=login_form)
 
-@auth.route('/register', methods=['GET', 'POST'])
+@auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         nombre = request.form['nombre']
@@ -45,7 +45,7 @@ def register():
     return render_template('auth/register.html')
 
 # 🚪 LOGOUT
-@auth.route('/logout')
+@auth_bp.route('/logout')
 @login_required
 def logout():
     logout_user()
