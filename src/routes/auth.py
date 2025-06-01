@@ -44,7 +44,7 @@ def register():
     
     return render_template('auth/register.html')
 
-# 🚪 LOGOUT
+#  LOGOUT
 @auth_bp.route('/logout')
 @login_required
 def logout():
