@@ -67,3 +67,12 @@ CREATE TABLE jugadores_fav (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (jugador_id) REFERENCES jugadores(id) ON DELETE CASCADE
 );
+
+CREATE TABLE estadisticas_cache (
+    team_id INT NOT NULL,
+    league_id INT NOT NULL,
+    season INT NOT NULL,
+    data JSON NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (team_id, league_id, season)
+);
