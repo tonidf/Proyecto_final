@@ -4,5 +4,79 @@
 
 {% block body %}
 
+    <div class="h-[80vh] bg-gray-100 flex gap-4 p-4">
+    <!-- Panel Izquierdo (Información del equipo y estadísticas) -->
+    <div class="w-2/3 flex flex-col gap-4">
+        <!-- Info del equipo -->
+        <div class="bg-white rounded-xl shadow p-4 flex items-center gap-4">
+        <img src="/ruta/escudo.png" alt="Escudo equipo" class="w-16 h-16 object-contain" />
+        <div>
+            <h2 class="text-xl font-bold">FC Barcelona <span>☆</span></h2>
+            <p class="text-sm text-gray-600">Fundado en XXXX</p>
+        </div>
+    </div>
+
+    <!-- Estadísticas Generales (4 bloques) -->
+        <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl shadow p-4">
+            <h3 class="font-semibold text-red-600 mb-2">General</h3>
+            <ul class="text-sm space-y-1">
+            <li>Estadística 1: XX</li>
+            <li>Estadística 2: XX</li>
+            <li>Estadística 3: XX</li>
+            </ul>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4">
+            <h3 class="font-semibold text-red-600 mb-2">General</h3>
+            <ul class="text-sm space-y-1">
+            <li>Estadística 1: XX</li>
+            <li>Estadística 2: XX</li>
+            <li>Estadística 3: XX</li>
+            </ul>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4">
+            <h3 class="font-semibold text-red-600 mb-2">General</h3>
+            <ul class="text-sm space-y-1">
+            <li>Estadística 1: XX</li>
+            <li>Estadística 2: XX</li>
+            <li>Estadística 3: XX</li>
+            </ul>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4">
+            <h3 class="font-semibold text-red-600 mb-2">General</h3>
+            <ul class="text-sm space-y-1">
+            <li>Estadística 1: XX</li>
+            <li>Estadística 2: XX</li>
+            <li>Estadística 3: XX</li>
+            </ul>
+        </div>
+        </div>
+    </div>
+
+
+    <div class="w-1/3 bg-white rounded-xl shadow p-4 overflow-y-auto">
+        <h3 class="text-red-600 font-bold mb-4 text-center">TABLA DE CLASIFICACIÓN</h3>
+            <table class="w-full text-sm text-left">
+                <thead>
+                    <tr class="text-gray-600">
+                        <th>Equipo</th>
+                        <th class="text-center">Últimos 5</th>
+                        <th class="text-right">PTOS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-t">
+                        <td class="flex items-center gap-2 py-2">
+                            <img src="/ruta/escudo.png" class="w-5 h-5" />
+                            <span>FC Barcelona</span>
+                        </td>
+                        <td class="text-center text-green-500">✔✔✔✔✔</td>
+                        <td class="text-right">82</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
 {% endblock %}
