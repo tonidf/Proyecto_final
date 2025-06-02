@@ -9,21 +9,30 @@
     <div class="w-2/3 flex flex-col gap-4">
         <!-- Info del equipo -->
         <div class="bg-white rounded-xl shadow p-4 flex items-center gap-4">
-        <img src="/ruta/escudo.png" alt="Escudo equipo" class="w-16 h-16 object-contain" />
+        <img src="{{equipo_cabecera[1]}}" alt="Escudo equipo" class="w-20 h-20 object-contain" />
         <div>
-            <h2 class="text-xl font-bold">FC Barcelona <span>☆</span></h2>
-            <p class="text-sm text-gray-600">Fundado en XXXX</p>
+            <h2 class="text-2xl font-bold">{{equipo_cabecera[0]}}<span><i class="far fa-star text-2xl"></i></span></h2>
+            <p class="text-sm text-gray-600">Fundado en {{equipo_cabecera[2]}}</p>
         </div>
     </div>
 
     <!-- Estadísticas Generales (4 bloques) -->
         <div class="grid grid-cols-2 gap-4">
-        <div class="bg-white rounded-xl shadow p-4">
-            <h3 class="font-semibold text-red-600 mb-2">General</h3>
-            <ul class="text-sm space-y-1">
-            <li>Estadística 1: XX</li>
-            <li>Estadística 2: XX</li>
-            <li>Estadística 3: XX</li>
+        <div class="bg-white rounded-xl flex justify-center items-center flex-col shadow p-4">
+            <h3 class="font-bold text-2xl text-red-600 mb-2">General</h3>
+            <ul class="text-sm space-y-1 w-full">
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg ">Partidos jugados:</span> 
+                    <span class="font-bold">{{equipo.fixtures.played.total}}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Goles anotados:</span> 
+                    <span class="font-bold">{{equipo.goals.for.total.total}}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Goles Encajados:</span>
+                    <span class="font-bold">{{ equipo.goals.against.total.total }}</span>
+                </div>
             </ul>
         </div>
         <div class="bg-white rounded-xl shadow p-4">
