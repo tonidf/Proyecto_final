@@ -22,6 +22,7 @@ CREATE TABLE equipos (
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_completo VARCHAR(100) NOT NULL,
+    es_admin ENUM('SI', 'NO') NOT NULL DEFAULT 'NO',
     contrasena VARCHAR(255) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE
 );

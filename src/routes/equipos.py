@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash, Blueprint
 from extensions import mysql
+from api_football import get_team_by_id # Importar la función para obtener el equipo por ID
 
 
 
@@ -12,3 +13,13 @@ def equipos():
     equipos = cursor.fetchall()
 
     return render_template('equipos.html', equipos=equipos)
+
+@equipos_bp.route('/equipos/<int:equipo_id>', methods=['GET'])
+def get_equipo(equipo_id):
+    equipo = get_team_by_id(equipo_id)
+    if not equipo:
+        flash("Equipo no encontrado", "error")
+        return redirect(url_for('equipos.equipos'))
+    
+
+    return render_template('equipo_detalle.html', equipo=equipo)
