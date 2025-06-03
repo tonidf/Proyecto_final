@@ -26,37 +26,64 @@
                     <span class="font-bold">{{equipo.fixtures.played.total}}</span>
                 </div>
                 <div class="flex items-center justify-between w-full">
-                    <span class="font-bold text-lg">Goles anotados:</span> 
-                    <span class="font-bold">{{equipo.goals.for.total.total}}</span>
+                    <span class="font-bold text-lg">Victorias totales:</span> 
+                    <span class="font-bold">{{equipo.fixtures.wins.total}}</span>
                 </div>
                 <div class="flex items-center justify-between w-full">
-                    <span class="font-bold text-lg">Goles Encajados:</span>
-                    <span class="font-bold">{{ equipo.goals.against.total.total }}</span>
+                    <span class="font-bold text-lg">Derrotas totales:</span>
+                    <span class="font-bold">{{  equipo.fixtures.loses.total}}</span>
                 </div>
             </ul>
         </div>
-        <div class="bg-white rounded-xl shadow p-4">
-            <h3 class="font-semibold text-red-600 mb-2">General</h3>
-            <ul class="text-sm space-y-1">
-            <li>Estadística 1: XX</li>
-            <li>Estadística 2: XX</li>
-            <li>Estadística 3: XX</li>
+        <div class="bg-white rounded-xl flex justify-center items-center flex-col shadow p-4">
+            <h3 class="font-bold text-2xl text-red-600 mb-2">Ataque</h3>
+            <ul class="text-sm space-y-1 w-full">
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg ">Goles totales:</span> 
+                    <span class="font-bold">{{ equipo.goals.for.total.total }}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Promedio de goles por partido:</span> 
+                    <span class="font-bold">{{ equipo.goals.for.average.total}}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Penaltis anotados:</span>
+                    <span class="font-bold">{{ equipo.penalty.scored.total }}</span>
+                </div>
             </ul>
         </div>
-        <div class="bg-white rounded-xl shadow p-4">
-            <h3 class="font-semibold text-red-600 mb-2">General</h3>
-            <ul class="text-sm space-y-1">
-            <li>Estadística 1: XX</li>
-            <li>Estadística 2: XX</li>
-            <li>Estadística 3: XX</li>
+        <div class="bg-white rounded-xl flex justify-center items-center flex-col shadow p-4">
+            <h3 class="font-bold text-2xl text-red-600 mb-2">Defensa</h3>
+            <ul class="text-sm w-full space-y-1">
+            <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg ">Goles Encajados:</span> 
+                    <span class="font-bold">{{ equipo.goals.against.total.total }}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Porterias a cero:</span> 
+                    <span class="font-bold">{{ equipo.clean_sheet.total}}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Partidos sin marcar:</span>
+                    <span class="font-bold">{{ equipo.failed_to_score.total }}</span>
+                </div>
             </ul>
         </div>
-        <div class="bg-white rounded-xl shadow p-4">
-            <h3 class="font-semibold text-red-600 mb-2">General</h3>
-            <ul class="text-sm space-y-1">
-            <li>Estadística 1: XX</li>
-            <li>Estadística 2: XX</li>
-            <li>Estadística 3: XX</li>
+        <div class="bg-white rounded-xl flex justify-center items-center flex-col shadow p-4">
+            <h3 class="font-bold text-2xl text-red-600 mb-2">Disciplina</h3>
+            <ul class="text-sm w-full space-y-1">
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Tarjetas amarillas:</span> 
+                    <span class="font-bold">{{ total_amarillas}}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">Tarjetas rojas:</span>
+                    <span class="font-bold">{{ total_rojas }}</span>
+                </div>
+                <div class="flex items-center justify-between w-full">
+                    <span class="font-bold text-lg">promedio de amarillas:</span>
+                    <span class="font-bold">{{ (total_amarillas / equipo.fixtures.played.total) | round(2) }}</span>
+                </div>
             </ul>
         </div>
         </div>

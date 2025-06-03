@@ -83,3 +83,6 @@ def get_team_statistics(team_id, league_id=140, season=2023):
     else:
         print(f"Error: {response.status_code}")
         return None
+
+def total_tarjetas(cards_data):
+    return sum(v['total'] for v in cards_data.values() if v['total'] is not None)

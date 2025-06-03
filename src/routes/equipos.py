@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash, Blueprint
 from extensions import mysql
-from api_football import get_team_statistics # Importar la función para obtener el equipo por ID
+from api_football import get_team_statistics, total_tarjetas # Importar la función para obtener el equipo por ID
 
 
 
@@ -21,9 +21,10 @@ def get_equipo(equipo_id):
     equipo_cabecera = cursor.fetchone()
     
     respuesta = get_team_statistics(equipo_id)
-    print(respuesta)
     if not respuesta:
         flash("Equipo no encontrado o sin estadísticas disponibles", "error")
         return redirect(url_for('equipos.equipos'))
+    total_amarillas = total_tarjetas(respuesta['cards']['yellow'])
+    total_rojas = total_tarjetas(respuesta['cards']['red'])
 
-    return render_template('equipo.html', equipo=respuesta, equipo_cabecera=equipo_cabecera)
+    return render_template('equipo.html', equipo=respuesta, equipo_cabecera=equipo_cabecera, total_amarillas=total_amarillas, total_rojas=total_rojas)
