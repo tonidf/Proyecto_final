@@ -7,6 +7,3 @@ main_bp = Blueprint('main', __name__)
 def inicio():
     return render_template('inicio.html')
 
-@main_bp.route('/general', methods=['GET', 'POST'])
-def general():
-    return render_template('general.html')

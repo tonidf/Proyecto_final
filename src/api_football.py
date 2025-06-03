@@ -108,5 +108,11 @@ def fetch_and_cache_rounds(league_id=140, season=2023):
         return []
     
 
+def get_rounds_from_cache(league_id=140, season=2023):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT round_name FROM rounds_cache WHERE league_id = %s AND season = %s ORDER BY round_name", (league_id, season))
+    rounds = [row[0] for row in cursor.fetchall()]
+    return rounds
+
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
