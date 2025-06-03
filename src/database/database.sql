@@ -76,3 +76,11 @@ CREATE TABLE estadisticas_cache (
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (team_id, league_id, season)
 );
+
+CREATE TABLE rounds_cache (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    league_id INT NOT NULL,
+    season INT NOT NULL,
+    round_name VARCHAR(100) NOT NULL,
+    UNIQUE KEY unique_round (league_id, season, round_name)
+);

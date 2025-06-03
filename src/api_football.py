@@ -83,6 +83,30 @@ def get_team_statistics(team_id, league_id=140, season=2023):
     else:
         print(f"Error: {response.status_code}")
         return None
+    
+def save_rounds_to_cache(rounds, league_id, season):
+    cursor = mysql.connection.cursor()
+    for round_name in rounds:
+        cursor.execute("INSERT IGNORE INTO rounds_cache (league_id, season, round_name)VALUES (%s, %s, %s)", (league_id, season, round_name))
+    mysql.connection.commit()
+
+def fetch_and_cache_rounds(league_id=140, season=2023):
+    url = f"{BASE_URL}/fixtures/rounds"
+    params = {
+        "league": league_id,
+        "season": season
+    }
+    
+
+    response = requests.get(url, headers=HEADERS, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        rounds = data.get("response", [])
+        save_rounds_to_cache(rounds, league_id, season)
+        return rounds
+    else:
+        return []
+    
 
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
