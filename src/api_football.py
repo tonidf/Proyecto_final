@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from extensions import mysql
 import MySQLdb.cursors
 
-CACHE_DURATION_HOURS = 12
+CACHE_DURATION_HOURS = 24
 
 API_KEY = os.getenv('API_KEY')  
 BASE_URL = 'https://v3.football.api-sports.io'
@@ -113,6 +113,21 @@ def get_rounds_from_cache(league_id=140, season=2023):
     cursor.execute("SELECT round_name FROM rounds_cache WHERE league_id = %s AND season = %s ORDER BY round_name", (league_id, season))
     rounds = [row[0] for row in cursor.fetchall()]
     return rounds
+
+def get_cached_fixtures(round_name, league_id, season):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT data, updated_at FROM fixtures_cache WHERE round_name = %s AND league_id = %s AND season %s", (round_name, league_id, season))
+    row = cursor.fetchone()
+    if row:
+        updated_at = row[1]
+        if updated_at > datetime.now() - timedelta(hours=CACHE_DURATION_HOURS):
+            return json.loads(row[0])  # devuelve los datos desde la caché
+    return None
+
+def save_fixtures_to_cache(round_name, league_id, season, data):
+    cursor = mysql.connection.cursor()
+    cursor.execute("INSERT INTO fixtures_cache (round_name, league_id, season, data, updated_at) VALUES (%s, %s,%s,%s, %s) ON DUPLICATE KEY UPDATE data = VALUES(data), updated_at = VALUES(updated_at)", (round_name, league_id, season, json.dumps(data), datetime.now()))
+    mysql.connection.commit()
 
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
