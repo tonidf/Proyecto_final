@@ -84,3 +84,13 @@ CREATE TABLE rounds_cache (
     round_name VARCHAR(100) NOT NULL,
     UNIQUE KEY unique_round (league_id, season, round_name)
 );
+
+CREATE TABLE fixtures_cache (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    round_name VARCHAR(50),
+    league_id INT,
+    season INT,
+    data LONGTEXT,
+    updated_at DATETIME,
+    UNIQUE KEY unique_round (round_name, league_id, season)
+);

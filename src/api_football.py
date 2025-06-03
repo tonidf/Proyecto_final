@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timedelta
 from extensions import mysql
 import MySQLdb.cursors
+import re
 
 CACHE_DURATION_HOURS = 24
 
@@ -112,11 +113,18 @@ def get_rounds_from_cache(league_id=140, season=2023):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT round_name FROM rounds_cache WHERE league_id = %s AND season = %s ORDER BY round_name", (league_id, season))
     rounds = [row[0] for row in cursor.fetchall()]
+
+    def extract_number(round_name):
+        match = re.search(r'(\d+)', round_name)
+        return int(match.group(1)) if match else 0
+
+    rounds.sort(key=extract_number)
+
     return rounds
 
 def get_cached_fixtures(round_name, league_id, season):
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT data, updated_at FROM fixtures_cache WHERE round_name = %s AND league_id = %s AND season %s", (round_name, league_id, season))
+    cursor.execute("SELECT data, updated_at FROM fixtures_cache WHERE round_name = %s AND league_id = %s AND season = %s", (round_name, league_id, season))
     row = cursor.fetchone()
     if row:
         updated_at = row[1]
@@ -133,22 +141,25 @@ def get_fixtures_by_round(round_name, league_id, season):
     # 1. Intenta recuperar de la caché
     cached = get_cached_fixtures(round_name, league_id, season)
     if cached:
+        print("Usando datos de caché para:", round_name)
         return cached
 
     # 2. Si no hay caché válida, llama a la API
     url = "https://v3.football.api-sports.io/fixtures"
-    headers = {
-        "x-apisports-key": "TU_API_KEY"
-    }
+
     params = {
         "league": league_id,
         "season": season,
         "round": round_name
     }
+    print("Llamando a la API con:", params)
 
-    response = requests.get(url, headers=headers, params=params)
+    
+    response = requests.get(url, headers=HEADERS, params=params)
+    print("Código de respuesta:", response.status_code)
     if response.status_code == 200:
         data = response.json().get("response", [])
+        print("Partidos recibidos:", data)
         save_fixtures_to_cache(round_name, league_id, season, data)
         return data
     else:

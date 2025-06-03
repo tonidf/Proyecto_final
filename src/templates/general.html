@@ -36,7 +36,12 @@
                 <span class="text-red-600 border-b-2 border-red-600">Todos</span>
                 <span class="text-gray-500">Favoritos</span>
             </div>
-            <span class="text-gray-600 text-xs">Jornada XX</span>
+            <select name="" id="rounds-select">
+                <option selected disabled>Selecciona una jornada</option>
+                {% for ronda in rounds %}
+                    <option value="{{ ronda }}">{{ ronda }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="flex space-x-2 text-xs mb-4">
             <span class="bg-red-200 text-red-800 px-2 py-1 rounded-full">Jugando</span>
@@ -44,28 +49,8 @@
             <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full">Próximamente</span>
         </div>
 
-        <div class="space-y-4">
-            <!-- Falta for -->
-            <div class="bg-gray-100 rounded-xl p-3 flex justify-between items-center">
-                <div class="text-xs text-gray-600">
-                    <p class="font-semibold">21:00</p>
-                    <p>Hoy</p>
-                </div>
-                <div class="flex flex-col text-center flex-grow">
-                    <div class="flex flex-row items-center justify-around space-x-2">
-                        <img src="" alt=""> <!-- escudo -->
-                        <p class="font-medium text-sm">FC Barcelona</p>
-                        <p class="text-xl font-bold ml-8">4</p>
-                    </div>
-                    <div class="flex flex-row items-center justify-around space-x-2">
-                        <img src="" alt=""> <!-- escudo -->
-                        <p class="font-medium text-sm">Real Madrid</p>
-                        <p class="text-xl font-bold">0</p>
-                    </div>
-                    
-                </div>
-                <button class="text-gray-400 text-xl">☆</button>
-            </div>
+        <div id="partidos-container" class="space-y-4">
+            
         </div>
     </div>
     <div class="space-y-6">
@@ -108,5 +93,39 @@
     </div>
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const select = document.getElementById("rounds-select");
+    const container = document.getElementById("partidos-container");
 
+    select.addEventListener("change", function () {
+        const jornada = this.value;
+        fetch(`/api/partidos?round=${encodeURIComponent(jornada)}`)
+            .then(response => response.json())
+            .then(partidos => {
+                container.innerHTML = ""; // limpiar
+
+                if (partidos.length === 0) {
+                    container.innerHTML = "<p>No hay partidos disponibles para esta jornada.</p>";
+                    return;
+                }
+
+                partidos.forEach(partido => {
+                    const div = document.createElement("div");
+                    div.innerHTML = `
+                        <div class="p-4 bg-gray-100 rounded-lg mb-2">
+                            <strong>${partido.teams.home.name}</strong> vs <strong>${partido.teams.away.name}</strong><br>
+                            ${partido.fixture.date.slice(0, 10)} ${partido.fixture.date.slice(11, 16)}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            })
+            .catch(error => {
+                console.error("Error al cargar partidos:", error);
+                container.innerHTML = "<p>Error al cargar los partidos.</p>";
+            });
+    });
+});
+</script>
 {% endblock %}
