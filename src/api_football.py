@@ -129,5 +129,30 @@ def save_fixtures_to_cache(round_name, league_id, season, data):
     cursor.execute("INSERT INTO fixtures_cache (round_name, league_id, season, data, updated_at) VALUES (%s, %s,%s,%s, %s) ON DUPLICATE KEY UPDATE data = VALUES(data), updated_at = VALUES(updated_at)", (round_name, league_id, season, json.dumps(data), datetime.now()))
     mysql.connection.commit()
 
+def get_fixtures_by_round(round_name, league_id, season):
+    # 1. Intenta recuperar de la caché
+    cached = get_cached_fixtures(round_name, league_id, season)
+    if cached:
+        return cached
+
+    # 2. Si no hay caché válida, llama a la API
+    url = "https://v3.football.api-sports.io/fixtures"
+    headers = {
+        "x-apisports-key": "TU_API_KEY"
+    }
+    params = {
+        "league": league_id,
+        "season": season,
+        "round": round_name
+    }
+
+    response = requests.get(url, headers=headers, params=params)
+    if response.status_code == 200:
+        data = response.json().get("response", [])
+        save_fixtures_to_cache(round_name, league_id, season, data)
+        return data
+    else:
+        return []
+
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
