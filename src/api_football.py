@@ -164,6 +164,21 @@ def get_fixtures_by_round(round_name, league_id, season):
         return data
     else:
         return []
+    
+def get_match_statistics(fixture_id):
+    url = f"https://v3.football.api-sports.io/fixtures/statistics?fixture={fixture_id}"
+    
+    try:
+        response = requests.get(url, headers=HEADERS)
+        response.raise_for_status()
+        data = response.json()
+
+        # La API devuelve una lista con estadísticas por equipo
+        return data['response']  # Lista con dos objetos: [home_team_stats, away_team_stats]
+
+    except requests.RequestException as e:
+        print(f"Error al obtener estadísticas del partido {fixture_id}: {e}")
+        return []
 
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
