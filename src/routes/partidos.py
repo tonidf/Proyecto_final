@@ -19,7 +19,9 @@ def general():
 @partidos_bp.route('/partidos/<int:fixture_id>', methods=['GET'])
 def obtener_partido(fixture_id):
     stats = get_match_statistics(fixture_id)  # función que llama a la API
-    return render_template('partido_individual.html', stats=stats)
+    team1 = stats[0]['team']
+    team2 = stats[1]['team']
+    return render_template('partido_individual.html', stats=stats, team1=team1, team2=team2)
 
 @partidos_bp.route('/api/partidos')
 def obtener_partidos_por_jornada():

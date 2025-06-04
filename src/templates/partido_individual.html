@@ -9,16 +9,16 @@
         <div class="flex items-center justify-center space-x-6">
             <!-- Equipo Local -->
             <div class="flex flex-col items-center space-y-2">
-                <img src="/static/uploads/barcelona.png" alt="Local" class="w-16 h-16">
-                <span class="text-lg font-semibold">Barcelona</span>
+                <img src="{{ team1.logo }}" alt="{{ team1.name }}" class="w-16 h-16">
+                <span class="text-lg font-semibold">{{ team1.name }}</span>
             </div>
 
             <span class="text-2xl font-bold text-gray-700">VS</span>
 
             <!-- Equipo Visitante -->
             <div class="flex flex-col items-center space-y-2">
-                <img src="/static/uploads/madrid.png" alt="Visitante" class="w-16 h-16">
-                <span class="text-lg font-semibold">Real Madrid</span>
+                <img src="{{ team2.logo }}" alt="{{ team2.name }}" class="w-16 h-16">
+                <span class="text-lg font-semibold">{{ team2.name }}</span>
             </div>
         </div>
     </div>
@@ -39,16 +39,22 @@
     <div id="contenido-partido" class="w-full max-w-3xl bg-white rounded-2xl shadow-md p-6">
         <!-- Aquí se insertará dinámicamente el contenido de alineaciones o estadísticas -->
     </div>
+
+    <!-- Datos ocultos de estadísticas -->
+    <div id="stats-data" data-stats='{{ stats | tojson | safe }}' hidden></div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+    const rawStats = document.getElementById("stats-data").dataset.stats;
+    const matchStats = JSON.parse(rawStats);
+
     const btnAlineaciones = document.getElementById("btn-alineaciones");
     const btnEstadisticas = document.getElementById("btn-estadisticas");
     const contenido = document.getElementById("contenido-partido");
 
     btnAlineaciones.addEventListener("click", () => {
-        contenido.innerHTML = "<p>Aquí van las alineaciones...</p>";
+        contenido.innerHTML = "<p class='text-center text-gray-600'>Aquí van las alineaciones...</p>";
         btnAlineaciones.classList.add("bg-red-500", "text-white");
         btnAlineaciones.classList.remove("bg-gray-300", "text-gray-700");
 
@@ -57,7 +63,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     btnEstadisticas.addEventListener("click", () => {
-        contenido.innerHTML = "<p>Aquí van las estadísticas...</p>";
+        const team1 = matchStats[0];
+        const team2 = matchStats[1];
+
+        function getStat(name) {
+            const obj1 = team1.statistics.find(s => s.type === name);
+            const obj2 = team2.statistics.find(s => s.type === name);
+            return {
+                name: name,
+                home: obj1 && obj1.value !== null ? obj1.value : 0,
+                away: obj2 && obj2.value !== null ? obj2.value : 0
+            };
+        }
+
+        const keys = [
+            "Ball Possession", "Total Shots", "Shots on Goal", "Shots off Goal",
+            "Blocked Shots", "Fouls", "Corners", "Offsides",
+            "Yellow Cards", "Red Cards", "Passes Total", "Passes Accurate"
+        ];
+
+        const rows = keys.map(k => getStat(k)).map(stat => `
+            <tr class="text-sm text-center border-b">
+                <td class="py-2">${stat.home}</td>
+                <td class="py-2 font-medium text-gray-700">${stat.name}</td>
+                <td class="py-2">${stat.away}</td>
+            </tr>
+        `).join("");
+
+        contenido.innerHTML = `
+            <table class="w-full table-auto border-collapse">
+                <thead>
+                    <tr class="text-xs uppercase text-gray-500 border-b">
+                        <th class="py-2">${team1.team.name}</th>
+                        <th class="py-2"></th>
+                        <th class="py-2">${team2.team.name}</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
+
         btnEstadisticas.classList.add("bg-red-500", "text-white");
         btnEstadisticas.classList.remove("bg-gray-300", "text-gray-700");
 
@@ -66,4 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+
+
+
 {% endblock %}
