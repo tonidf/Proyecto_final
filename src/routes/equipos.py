@@ -24,7 +24,11 @@ def get_equipo(equipo_id):
     if not respuesta:
         flash("Equipo no encontrado o sin estadísticas disponibles", "error")
         return redirect(url_for('equipos.equipos'))
-    total_amarillas = total_tarjetas(respuesta['cards']['yellow'])
-    total_rojas = total_tarjetas(respuesta['cards']['red'])
+    cards = respuesta.get('cards', {})
+    yellow_cards = cards.get('yellow', {})
+    total_amarillas = total_tarjetas(yellow_cards)
+    cards = respuesta.get('cards', {})
+    red_cards = cards.get('yellow', {})
+    total_rojas = total_tarjetas(red_cards)
 
     return render_template('equipo_individual.html', equipo=respuesta, equipo_cabecera=equipo_cabecera, total_amarillas=total_amarillas, total_rojas=total_rojas)

@@ -8,20 +8,20 @@
     <div class="bg-white rounded-2xl shadow-md p-6 w-full max-w-3xl mb-6">
         <div class="flex items-center justify-center space-x-6">
             <!-- Equipo Local -->
-            <div class="flex flex-col items-center space-y-2">
+            <a href="{{url_for('equipos.get_equipo', equipo_id=team1.id)}}" class="flex flex-col items-center space-y-2 hover:bg-gray-300 p-2 rounded-lg  transition-colors duration-300">
                 <img src="{{ team1.logo }}" alt="{{ team1.name }}" class="w-16 h-16">
                 <span class="text-lg font-semibold">{{ team1.name }}</span>
-            </div>
+            </a>
 
             <div class="flex flex-col items-center">
                 <span class="text-3xl font-bold text-gray-800">{{ score1 }} - {{ score2 }}</span>
                 <span class="text-sm text-gray-500">Resultado</span>
             </div>
             <!-- Equipo Visitante -->
-            <div class="flex flex-col items-center space-y-2">
+            <a href="{{url_for('equipos.get_equipo', equipo_id=team2.id)}}" class="flex flex-col items-center space-y-2 hover:bg-gray-300 p-2 rounded-lg  transition-colors duration-300">
                 <img src="{{ team2.logo }}" alt="{{ team2.name }}" class="w-16 h-16">
                 <span class="text-lg font-semibold">{{ team2.name }}</span>
-            </div>
+            </a>
         </div>
     </div>
 
