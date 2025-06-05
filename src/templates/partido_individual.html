@@ -13,8 +13,10 @@
                 <span class="text-lg font-semibold">{{ team1.name }}</span>
             </div>
 
-            <span class="text-2xl font-bold text-gray-700">VS</span>
-
+            <div class="flex flex-col items-center">
+                <span class="text-3xl font-bold text-gray-800">{{ score1 }} - {{ score2 }}</span>
+                <span class="text-sm text-gray-500">Resultado</span>
+            </div>
             <!-- Equipo Visitante -->
             <div class="flex flex-col items-center space-y-2">
                 <img src="{{ team2.logo }}" alt="{{ team2.name }}" class="w-16 h-16">
@@ -42,26 +44,22 @@
 
     <!-- Datos ocultos de estadísticas -->
     <div id="stats-data" data-stats='{{ stats | tojson | safe }}' hidden></div>
+    <div id="lineups-data" data-lineups='{{ lineups | tojson | safe }}' hidden></div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const rawStats = document.getElementById("stats-data").dataset.stats;
+    const rawLineups = document.getElementById("lineups-data").dataset.lineups;
+
     const matchStats = JSON.parse(rawStats);
+    const matchLineups = JSON.parse(rawLineups);
 
     const btnAlineaciones = document.getElementById("btn-alineaciones");
     const btnEstadisticas = document.getElementById("btn-estadisticas");
     const contenido = document.getElementById("contenido-partido");
 
-    btnAlineaciones.addEventListener("click", () => {
-        contenido.innerHTML = "<p class='text-center text-gray-600'>Aquí van las alineaciones...</p>";
-        btnAlineaciones.classList.add("bg-red-500", "text-white");
-        btnAlineaciones.classList.remove("bg-gray-300", "text-gray-700");
-
-        btnEstadisticas.classList.remove("bg-red-500", "text-white");
-        btnEstadisticas.classList.add("bg-gray-300", "text-gray-700");
-    });
-
+    // Botón: Estadísticas
     btnEstadisticas.addEventListener("click", () => {
         const team1 = matchStats[0];
         const team2 = matchStats[1];
@@ -103,14 +101,69 @@ document.addEventListener("DOMContentLoaded", () => {
             </table>
         `;
 
+        // Estilo activo
         btnEstadisticas.classList.add("bg-red-500", "text-white");
         btnEstadisticas.classList.remove("bg-gray-300", "text-gray-700");
 
         btnAlineaciones.classList.remove("bg-red-500", "text-white");
         btnAlineaciones.classList.add("bg-gray-300", "text-gray-700");
     });
+
+    // Botón: Alineaciones
+    btnAlineaciones.addEventListener("click", () => {
+        const lineup1 = matchLineups[0];
+        const lineup2 = matchLineups[1];
+
+        function renderTeamLineup(team) {
+            const coach = team.coach.name;
+            const formation = team.formation;
+            const starters = team.startXI.map(p => `
+                <li class="flex justify-between py-1">
+                    <span>${p.player.number}</span>
+                    <span class="ml-2">${p.player.name}</span>
+                </li>
+            `).join("");
+
+            const substitutes = team.substitutes.map(p => `
+                <li class="flex justify-between py-1 text-gray-500">
+                    <span>${p.player.number}</span>
+                    <span class="ml-2">${p.player.name}</span>
+                </li>
+            `).join("");
+
+            return `
+                <div class="bg-gray-50 rounded-xl shadow-sm p-4 w-full md:w-1/2">
+                    <h3 class="text-xl font-bold mb-1 text-red-600">${team.team.name}</h3>
+                    <p class="text-sm text-gray-600 mb-1">Entrenador: <span class="font-medium">${coach}</span></p>
+                    <p class="text-sm text-gray-600 mb-4">Formación: <span class="font-medium">${formation}</span></p>
+                    <div>
+                        <h4 class="font-semibold text-gray-700 border-b pb-1 mb-2">Titulares</h4>
+                        <ul class="text-sm mb-4">${starters}</ul>
+                        <h4 class="font-semibold text-gray-700 border-b pb-1 mb-2">Suplentes</h4>
+                        <ul class="text-sm">${substitutes}</ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        contenido.innerHTML = `
+            <div class="flex flex-col md:flex-row gap-6">
+                ${renderTeamLineup(lineup1)}
+                ${renderTeamLineup(lineup2)}
+            </div>
+        `;
+
+        // Estilo activo
+        btnAlineaciones.classList.add("bg-red-500", "text-white");
+        btnAlineaciones.classList.remove("bg-gray-300", "text-gray-700");
+
+        btnEstadisticas.classList.remove("bg-red-500", "text-white");
+        btnEstadisticas.classList.add("bg-gray-300", "text-gray-700");
+    });
+    btnAlineaciones.click();
 });
 </script>
+
 
 
 

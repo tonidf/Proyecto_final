@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, f
 import requests
 import os
 from extensions import mysql
-from api_football import get_rounds_from_cache, fetch_and_cache_rounds, get_fixtures_by_round, get_match_statistics
+from api_football import get_rounds_from_cache, fetch_and_cache_rounds, get_fixtures_by_round, get_match_statistics, get_match_lineups, get_match_result
 
 partidos_bp = Blueprint('partidos', __name__)
 
@@ -19,9 +19,12 @@ def general():
 @partidos_bp.route('/partidos/<int:fixture_id>', methods=['GET'])
 def obtener_partido(fixture_id):
     stats = get_match_statistics(fixture_id)  # función que llama a la API
+    lineups = get_match_lineups(fixture_id)
     team1 = stats[0]['team']
     team2 = stats[1]['team']
-    return render_template('partido_individual.html', stats=stats, team1=team1, team2=team2)
+    goals_home, goals_away = get_match_result(fixture_id)
+    print(lineups)
+    return render_template('partido_individual.html', stats=stats, team1=team1, team2=team2, lineups=lineups, score1=goals_home, score2=goals_away)
 
 @partidos_bp.route('/api/partidos')
 def obtener_partidos_por_jornada():

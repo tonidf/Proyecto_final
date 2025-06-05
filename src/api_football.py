@@ -180,5 +180,31 @@ def get_match_statistics(fixture_id):
         print(f"Error al obtener estadísticas del partido {fixture_id}: {e}")
         return []
 
+def get_match_lineups(fixture_id):
+    url = "https://v3.football.api-sports.io/fixtures/lineups"
+    params = {
+        "fixture": fixture_id
+    }
+
+    response = requests.get(url, headers=HEADERS, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        return data.get("response", [])
+    else:
+        print(f"Error al obtener alineaciones: {response.status_code}")
+        return []
+    
+def get_match_result(fixture_id):
+    url = f"https://v3.football.api-sports.io/fixtures?id={fixture_id}"
+    response = requests.get(url, headers=HEADERS)
+    data = response.json()
+
+    fixture_data = data['response'][0]
+    goals_home = fixture_data['goals']['home']
+    goals_away = fixture_data['goals']['away']
+
+    return goals_home, goals_away
+
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
