@@ -30,13 +30,15 @@
                         </div>
                     </div>
                 </a>
-                
-                <div class=" cursor-pointer relative group inline-block">
-                    <i class="fas fa-futbol transition-all cursor-pointer duration-200 hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg "></i>
-                    <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
-                        partidos
+                <a href="{{url_for('partidos.general')}}">
+                    <div class=" cursor-pointer relative group inline-block">
+                        <i class="fas fa-futbol transition-all cursor-pointer duration-200 hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg "></i>
+                        <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                            partidos
+                        </div>
                     </div>
-                </div>
+                </a>
+                
             </div>
         </div>
 

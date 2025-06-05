@@ -28,7 +28,7 @@ def get_equipo(equipo_id):
     yellow_cards = cards.get('yellow', {})
     total_amarillas = total_tarjetas(yellow_cards)
     cards = respuesta.get('cards', {})
-    red_cards = cards.get('yellow', {})
+    red_cards = cards.get('red', {})
     total_rojas = total_tarjetas(red_cards)
 
     return render_template('equipo_individual.html', equipo=respuesta, equipo_cabecera=equipo_cabecera, total_amarillas=total_amarillas, total_rojas=total_rojas)

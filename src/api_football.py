@@ -80,7 +80,7 @@ def get_team_statistics(team_id, league_id=140, season=2023):
 
     if response.status_code == 200:
         save_statistics_to_cache(team_id, league_id, season, data)
-        return response.json()
+        return data
     else:
         print(f"Error: {response.status_code}")
         return None
@@ -205,6 +205,22 @@ def get_match_result(fixture_id):
     goals_away = fixture_data['goals']['away']
 
     return goals_home, goals_away
+
+def obtener_partido_destacado(partidos):
+    partido_destacado = None
+    max_goles = -1
+
+    for partido in partidos:
+        goles_local = partido['goals']['home'] or 0
+        goles_visitante = partido['goals']['away'] or 0
+        total_goles = goles_local + goles_visitante
+
+        if total_goles > max_goles:
+            max_goles = total_goles
+            partido_destacado = partido
+
+    return partido_destacado
+
 
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
