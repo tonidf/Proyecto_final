@@ -230,7 +230,8 @@ def get_clasificacion(league_id=140, season=2023):
     clasificacion = []
     if data['response']:
         equipos = data['response'][0]['league']['standings'][0]
-        for equipo in equipos:
+
+        for idx, equipo in enumerate(equipos, start=1):
             ultimos_resultados = []
             form = equipo.get('form', '')
             for resultado in form[-5:]:
@@ -241,10 +242,22 @@ def get_clasificacion(league_id=140, season=2023):
                 elif resultado == 'L':
                     ultimos_resultados.append('D')
 
-            stats = equipo['all']  # Datos generales (home+away)
+            stats = equipo['all']
             goles_favor = stats['goals']['for']
             goles_contra = stats['goals']['against']
             diferencia = goles_favor - goles_contra
+
+            # Determinar zona según posición
+            if idx <= 4:
+                zona = 'champions'
+            elif idx <= 6:
+                zona = 'europa'
+            elif idx <= 7:
+                zona = 'conference'
+            elif idx >= 18:
+                zona = 'descenso'
+            else:
+                zona = None
 
             clasificacion.append({
                 'nombre': equipo['team']['name'],
@@ -257,7 +270,8 @@ def get_clasificacion(league_id=140, season=2023):
                 'perdidos': stats['lose'],
                 'goles_a_favor': goles_favor,
                 'goles_en_contra': goles_contra,
-                'diferencia_goles': diferencia
+                'diferencia_goles': diferencia,
+                'zona': zona,
             })
 
     return clasificacion
