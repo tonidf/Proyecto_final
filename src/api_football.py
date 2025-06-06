@@ -260,6 +260,7 @@ def get_clasificacion(league_id=140, season=2023):
                 zona = None
 
             clasificacion.append({
+                'api_id': equipo['team']['id'],
                 'nombre': equipo['team']['name'],
                 'logo': equipo['team']['logo'],
                 'ultimos5': ultimos_resultados,

@@ -102,7 +102,8 @@
                 </div>
                 
                 {% for item in clasificacion %}
-                <div class="grid grid-cols-[4px_auto_minmax(0,_1fr)_auto_auto] items-center text-sm px-2 py-2 border-b hover:bg-gray-50 {% if item.nombre == equipo_cabecera[0] %}bg-gray-200{% endif %}">
+                <div class="grid grid-cols-[4px_auto_minmax(0,_1fr)_auto_auto] items-center text-sm px-2 py-2 border-b hover:bg-gray-50 cursor-pointer {% if item.nombre == equipo_cabecera[0] %}bg-gray-200{% endif %}"
+                data-url="{{ url_for('main.tabla') }}">
                     <!-- Línea lateral de color -->
                     <div class="
                         {% if item.zona == 'champions' %}bg-blue-600
@@ -146,11 +147,10 @@
         </div>
     </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('tr[data-href]').forEach(function (row) {
-            row.addEventListener('click', function () {
-                window.location = row.dataset.href;
-            });
+    document.querySelectorAll('[data-url]').forEach(row => {
+        row.addEventListener('click', () => {
+            const url = row.getAttribute('data-url');
+            if (url) window.location.href = url;
         });
     });
 </script>
