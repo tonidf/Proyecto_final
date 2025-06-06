@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash, Blueprint
 from extensions import mysql
-from api_football import get_team_statistics, total_tarjetas # Importar la función para obtener el equipo por ID
+from api_football import get_team_statistics, total_tarjetas, get_clasificacion # Importar la función para obtener el equipo por ID
 
 
 
@@ -19,6 +19,7 @@ def get_equipo(equipo_id):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT nombre, logo, founded FROM equipos WHERE api_id = %s", (equipo_id,))
     equipo_cabecera = cursor.fetchone()
+    clasificacion = get_clasificacion()
     
     respuesta = get_team_statistics(equipo_id)
     if not respuesta:
@@ -31,4 +32,4 @@ def get_equipo(equipo_id):
     red_cards = cards.get('red', {})
     total_rojas = total_tarjetas(red_cards)
 
-    return render_template('equipo_individual.html', equipo=respuesta, equipo_cabecera=equipo_cabecera, total_amarillas=total_amarillas, total_rojas=total_rojas)
+    return render_template('equipo_individual.html', equipo=respuesta, equipo_cabecera=equipo_cabecera, total_amarillas=total_amarillas, total_rojas=total_rojas, clasificacion=clasificacion)

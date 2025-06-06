@@ -1,0 +1,58 @@
+{% extends './layouts/layout.html' %}
+
+{% block title %}Clasificación Completa{% endblock %}
+
+{% block body %}
+<div class="p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center text-red-600">Clasificación Completa</h1>
+    <div class="overflow-x-auto bg-white rounded-xl shadow">
+        <table class="min-w-full text-sm text-left">
+            <thead class="bg-gray-100 text-gray-700 text-xs uppercase">
+                <tr>
+                    <th class="px-3 py-2">Pos</th>
+                    <th class="px-3 py-2">Equipo</th>
+                    <th class="px-3 py-2 text-center">Últimos 5</th>
+                    <th class="px-3 py-2 text-right">PTS</th>
+                    <th class="px-3 py-2 text-right">Jugados</th>
+                    <th class="px-3 py-2 text-right">Ganados</th>
+                    <th class="px-3 py-2 text-right">Empatados</th>
+                    <th class="px-3 py-2 text-right">Perdidos</th>
+                    <th class="px-3 py-2 text-right">GF</th>
+                    <th class="px-3 py-2 text-right">GC</th>
+                    <th class="px-3 py-2 text-right">Dif</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipo in clasificacion %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-3 py-2 font-bold">{{ loop.index }}</td>
+                    <td class="px-3 py-2 flex items-center gap-2">
+                        <img src="{{ equipo.logo }}" alt="Logo" class="w-5 h-5" />
+                        {{ equipo.nombre }}
+                    </td>
+                    <td class="px-3 py-2 text-center">
+                        {% for r in equipo.ultimos5 %}
+                            {% if r == 'V' %}
+                                <span class="bg-green-400 text-white text-xs px-2 py-1 rounded">V</span>
+                            {% elif r == 'D' %}
+                                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded">D</span>
+                            {% else %}
+                                <span class="bg-yellow-400 text-white text-xs px-2 py-1 rounded">E</span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td class="px-3 py-2 text-right font-semibold">{{ equipo.puntos }}</td>
+                    <td class="px-3 py-2 text-right">{{ equipo.jugados }}</td>
+                    <td class="px-3 py-2 text-right">{{ equipo.ganados }}</td>
+                    <td class="px-3 py-2 text-right">{{ equipo.empatados }}</td>
+                    <td class="px-3 py-2 text-right">{{ equipo.perdidos }}</td>
+                    <td class="px-3 py-2 text-right">{{ equipo.goles_a_favor }}</td>
+                    <td class="px-3 py-2 text-right">{{ equipo.goles_en_contra }}</td>
+                    <td class="px-3 py-2 text-right">{{ equipo.diferencia_goles }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
