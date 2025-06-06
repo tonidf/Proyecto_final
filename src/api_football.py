@@ -222,5 +222,45 @@ def obtener_partido_destacado(partidos):
     return partido_destacado
 
 
+def get_clasificacion(league_id=140, season=2023):
+    url = f"{BASE_URL}/standings?league={league_id}&season={season}"
+    response = requests.get(url, headers=HEADERS)
+    data = response.json()
+
+    clasificacion = []
+    if data['response']:
+        equipos = data['response'][0]['league']['standings'][0]
+        for equipo in equipos:
+            ultimos_resultados = []
+            form = equipo.get('form', '')
+            for resultado in form[-5:]:
+                if resultado == 'W':
+                    ultimos_resultados.append('V')
+                elif resultado == 'D':
+                    ultimos_resultados.append('E')
+                elif resultado == 'L':
+                    ultimos_resultados.append('D')
+
+            stats = equipo['all']  # Datos generales (home+away)
+            goles_favor = stats['goals']['for']
+            goles_contra = stats['goals']['against']
+            diferencia = goles_favor - goles_contra
+
+            clasificacion.append({
+                'nombre': equipo['team']['name'],
+                'logo': equipo['team']['logo'],
+                'ultimos5': ultimos_resultados,
+                'puntos': equipo['points'],
+                'jugados': stats['played'],
+                'ganados': stats['win'],
+                'empatados': stats['draw'],
+                'perdidos': stats['lose'],
+                'goles_a_favor': goles_favor,
+                'goles_en_contra': goles_contra,
+                'diferencia_goles': diferencia
+            })
+
+    return clasificacion
+
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)

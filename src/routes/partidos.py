@@ -1,9 +1,5 @@
-from operator import ge
-from flask import Flask, request, jsonify, render_template, redirect, url_for, flash, Blueprint
-import requests
-import os
-from extensions import mysql
-from api_football import get_rounds_from_cache, fetch_and_cache_rounds, get_fixtures_by_round, get_match_statistics, get_match_lineups, get_match_result
+from flask import request, jsonify, render_template, redirect, url_for, flash, Blueprint
+from api_football import get_rounds_from_cache, fetch_and_cache_rounds, get_fixtures_by_round, get_match_statistics, get_match_lineups, get_match_result, get_clasificacion
 
 partidos_bp = Blueprint('partidos', __name__)
 
@@ -11,10 +7,11 @@ partidos_bp = Blueprint('partidos', __name__)
 def general():
     rounds = get_rounds_from_cache()
 
+    clasificacion = get_clasificacion()
     if not rounds:
         rounds = fetch_and_cache_rounds()
 
-    return render_template('general.html', rounds=rounds)
+    return render_template('general.html', rounds=rounds, clasificacion=clasificacion)
 
 @partidos_bp.route('/partidos/<int:fixture_id>', methods=['GET'])
 def obtener_partido(fixture_id):
