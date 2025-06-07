@@ -277,5 +277,12 @@ def get_clasificacion(league_id=140, season=2023):
 
     return clasificacion
 
+def obtener_team_id_por_nombre(nombre):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT api_id FROM equipos WHERE nombre = %s", (nombre,))
+    result = cur.fetchone()
+    cur.close()
+    return result[0] if result else None
+
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)

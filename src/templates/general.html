@@ -88,29 +88,36 @@
     </div>
 
     <!-- Comparador de estadísticas -->
-    <div class=" flex flex-col items-center bg-white rounded-2xl shadow-md p-4">
+    <form method="get" action="/comparar" class="flex flex-col items-center bg-white rounded-2xl shadow-md p-4">
         <h2 class="text-red-600 text-sm font-bold mb-4">COMPARADOR DE ESTADÍSTICAS</h2>
-        <div class="w-full flex items-center justify-between mb-2">
+
+        <div class="w-full flex items-center justify-between mb-2 relative">
             <span class="icon-container mr-2" id="icono-equipo1">
                 <div class="icon-content">
                     <i class="fa-solid fa-shield text-3xl text-gray-400"></i>
                 </div>
             </span>
-            <input type="text" id="equipo1" placeholder="Equipo 1" class="w-full mb-2 px-3 py-2 border rounded">
+            <input type="text" id="equipo1" name="equipo1" placeholder="Equipo 1"
+                class="w-full mb-2 px-3 py-2 border rounded" autocomplete="off">
             <ul id="sugerencias-equipo1" class="absolute bg-white border w-full rounded shadow mt-1 z-10 hidden"></ul>
         </div>
+
         <div class="w-full border-[0.5px] border-gray-400 my-4"></div>
-        <div class="w-full flex items-center justify-between mb-4">
+
+        <div class="w-full flex items-center justify-between mb-4 relative">
             <span class="icon-container mr-2" id="icono-equipo2">
                 <div class="icon-content">
                     <i class="fa-solid fa-shield text-3xl text-gray-400"></i>
                 </div>
             </span>
-            <input type="text" id="equipo2" placeholder="Equipo 2" class="w-full mb-4 px-3 py-2 border rounded">
+            <input type="text" id="equipo2" name="equipo2" placeholder="Equipo 2"
+                class="w-full mb-4 px-3 py-2 border rounded" autocomplete="off">
             <ul id="sugerencias-equipo2" class="absolute bg-white border w-full rounded shadow mt-1 z-10 hidden"></ul>
         </div>
-        <button class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">Comparar</button>
-    </div>
+
+        <button type="submit"
+            class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">Comparar</button>
+    </form>
     </div>
 </div>
 <script>
