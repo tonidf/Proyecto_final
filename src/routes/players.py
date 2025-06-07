@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, render_template
 import requests
 import os
 
@@ -18,3 +18,7 @@ def buscar_jugador(nombre):
     response = requests.get(url, headers=headers)
     data = response.json()
     return jsonify(data)
+
+@players_bp.route('/jugadores/general')
+def jugadores_general():
+    return render_template('jugadores_general.html')
