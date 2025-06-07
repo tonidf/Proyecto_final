@@ -7,19 +7,19 @@
 
     <div class="flex justify-around mb-8">
         <!-- Equipo 1 -->
-        <div class="text-center">
+        <a href="{{url_for('equipos.get_equipo', equipo_id=equipo1['team']['id'])}}" class="text-center hover:bg-gray-300 p-4 rounded-lg transition-colors duration-300">
             <img src="{{ equipo1['team']['logo'] }}" alt="{{ equipo1['team']['name'] }} logo" class="mx-auto w-24 h-24 mb-2">
             <h3 class="text-xl font-bold">{{ equipo1['team']['name'] }}</h3>
-        </div>
+        </a>
 
         <!-- VS -->
         <div class="flex items-center text-2xl font-bold text-gray-600">VS</div>
         
         <!-- Equipo 2 -->
-        <div class="text-center">
+        <a href="{{url_for('equipos.get_equipo', equipo_id=equipo2['team']['id'])}}" class="text-center  hover:bg-gray-300 p-4 rounded-lg transition-colors duration-300"">
             <img src="{{ equipo2['team']['logo'] }}" alt="{{ equipo2['team']['name'] }} logo" class="mx-auto w-24 h-24 mb-2">
             <h3 class="text-xl font-bold">{{ equipo2['team']['name'] }}</h3>
-        </div>
+        </a>
     </div>
 
     <!-- Estadísticas comparadas en columnas -->

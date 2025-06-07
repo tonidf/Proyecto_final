@@ -4,41 +4,36 @@
 
 {% block body %}
 <div class="grid grid-cols-3 gap-6 p-6 bg-gray-100">
-    <a href="{{url_for('main.tabla')}}" class="hover:shadow-lg transition-shadow duration-300">
+    <!-- Tabla de clasificación -->
+    <div class="hover:shadow-lg transition-shadow duration-300">
         <div class="bg-white rounded-lg shadow overflow-hidden max-h-[78vh] overflow-y-auto">
             <!-- Header -->
             <div class="grid grid-cols-[auto_minmax(0,_1fr)_auto_auto] text-gray-600 font-semibold text-xs uppercase border-b px-4 py-2 sticky top-0 bg-white z-10">
                 <div class="pr-1 px-3">Pos</div>
                 <div class="px-3">Equipo</div>
                 <div class="text-center px-3 mr-4">Últimos 5</div>
-                <div class="text-right pl-2 ">Pts</div>
+                <div class="text-right pl-2">Pts</div>
             </div>
 
             <!-- Filas -->
             {% for equipo in clasificacion %}
             <div class="grid grid-cols-[4px_auto_minmax(0,_1fr)_auto_auto] items-center text-sm px-4 py-2 border-b hover:bg-gray-50">
-                <!-- Línea lateral de color -->
                 <div class="
                     {% if equipo.zona == 'champions' %}bg-blue-600
                     {% elif equipo.zona == 'europa' %}bg-orange-500
                     {% elif equipo.zona == 'conference' %}bg-green-600
                     {% elif equipo.zona == 'descenso' %}bg-red-600
                     {% else %}bg-transparent{% endif %}
-                    rounded-r-full
-                    h-8
-                ">
+                    rounded-r-full h-8">
                 </div>
 
-                <!-- Posición -->
                 <div class="pr-1 font-bold">{{ loop.index }}.</div>
 
-                <!-- Equipo -->
                 <div class="flex items-center space-x-1">
                     <img src="{{ equipo.logo }}" alt="Escudo" class="w-5 h-5">
                     <span>{{ equipo.nombre }}</span>
                 </div>
 
-                <!-- Últimos 5 -->
                 <div class="flex justify-center space-x-1">
                     {% for resultado in equipo.ultimos5 %}
                         {% if resultado == 'V' %}
@@ -51,13 +46,13 @@
                     {% endfor %}
                 </div>
 
-                <!-- Puntos -->
                 <div class="text-right font-bold ml-6">{{ equipo.puntos }}</div>
             </div>
             {% endfor %}
         </div>
-    </a>
-    <!-- falta for -->
+    </div>
+
+    <!-- Partidos por jornada -->
     <div class="bg-white rounded-2xl shadow-md p-4">
         <div class="flex justify-between items-center mb-4">
             <div class="flex space-x-2 text-sm font-semibold">
@@ -78,46 +73,48 @@
         </div>
 
         <div id="partidos-container" class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
-            
+            <!-- Aquí se cargan dinámicamente los partidos -->
         </div>
     </div>
+
+    <!-- Comparador + destacado -->
     <div class="space-y-6">
-    <!-- Encuentro destacado -->
-    <div id="partido-destacado" class="bg-white rounded-2xl shadow-md p-4">
-        
-    </div>
-
-    <!-- Comparador de estadísticas -->
-    <form method="get" action="/comparar" class="flex flex-col items-center bg-white rounded-2xl shadow-md p-4">
-        <h2 class="text-red-600 text-sm font-bold mb-4">COMPARADOR DE ESTADÍSTICAS</h2>
-
-        <div class="w-full flex items-center justify-between mb-2 relative">
-            <span class="icon-container mr-2" id="icono-equipo1">
-                <div class="icon-content">
-                    <i class="fa-solid fa-shield text-3xl text-gray-400"></i>
-                </div>
-            </span>
-            <input type="text" id="equipo1" name="equipo1" placeholder="Equipo 1"
-                class="w-full mb-2 px-3 py-2 border rounded" autocomplete="off">
-            <ul id="sugerencias-equipo1" class="absolute bg-white border w-full rounded shadow mt-1 z-10 hidden"></ul>
+        <!-- Encuentro destacado -->
+        <div id="partido-destacado" class="bg-white rounded-2xl shadow-md p-4">
+            <!-- Aquí se muestra dinámicamente el partido destacado -->
         </div>
 
-        <div class="w-full border-[0.5px] border-gray-400 my-4"></div>
+        <!-- Comparador de estadísticas -->
+        <form method="get" action="/comparar" class="flex flex-col items-center bg-white rounded-2xl shadow-md p-4">
+            <h2 class="text-red-600 text-sm font-bold mb-4">COMPARADOR DE ESTADÍSTICAS</h2>
 
-        <div class="w-full flex items-center justify-between mb-4 relative">
-            <span class="icon-container mr-2" id="icono-equipo2">
-                <div class="icon-content">
-                    <i class="fa-solid fa-shield text-3xl text-gray-400"></i>
-                </div>
-            </span>
-            <input type="text" id="equipo2" name="equipo2" placeholder="Equipo 2"
-                class="w-full mb-4 px-3 py-2 border rounded" autocomplete="off">
-            <ul id="sugerencias-equipo2" class="absolute bg-white border w-full rounded shadow mt-1 z-10 hidden"></ul>
-        </div>
+            <div class="w-full flex items-center justify-between mb-2 relative">
+                <span class="icon-container mr-2" id="icono-equipo1">
+                    <div class="icon-content">
+                        <i class="fa-solid fa-shield text-3xl text-gray-400"></i>
+                    </div>
+                </span>
+                <input type="text" id="equipo1" name="equipo1" placeholder="Equipo 1"
+                    class="w-full mb-2 px-3 py-2 border rounded" autocomplete="off">
+                <ul id="sugerencias-equipo1" class="absolute top-full mt-1 left-0 bg-white border w-full rounded shadow z-10 hidden"></ul>
+            </div>
 
-        <button type="submit"
-            class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">Comparar</button>
-    </form>
+            <div class="w-full border-[0.5px] border-gray-400 my-4"></div>
+
+            <div class="w-full flex items-center justify-between mb-4 relative">
+                <span class="icon-container mr-2" id="icono-equipo2">
+                    <div class="icon-content">
+                        <i class="fa-solid fa-shield text-3xl text-gray-400"></i>
+                    </div>
+                </span>
+                <input type="text" id="equipo2" name="equipo2" placeholder="Equipo 2"
+                    class="w-full mb-4 px-3 py-2 border rounded" autocomplete="off">
+                    <ul id="sugerencias-equipo2" class="absolute top-full mt-1 left-0 bg-white border w-full rounded shadow z-10 hidden"></ul>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">Comparar</button>
+        </form>
     </div>
 </div>
 <script>
@@ -255,27 +252,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const lista = document.getElementById(`sugerencias-${inputId}`);
 
         let timeout = null;
+        let fetchId = 0;
 
         input.addEventListener("input", () => {
             clearTimeout(timeout);
             const valor = input.value.trim();
 
-            if (valor.length === 0) {
-                // Restaurar icono por defecto
-                const iconoContenedor = document.getElementById(`icono-${inputId}`);
-                const iconoContent = iconoContenedor.querySelector(".icon-content");
-                if (iconoContent) {
-                    iconoContent.innerHTML = '<i class="fa-solid fa-shield text-3xl text-gray-400"></i>';
-                }
-                lista.classList.add("hidden");
-                return;
-            }
-
             timeout = setTimeout(() => {
-                if (valor.length >= 3) {
+                if (valor.length >= 2) {
+                    const currentFetchId = ++fetchId;
                     fetch(`/buscar_equipos?nombre=${encodeURIComponent(valor)}`)
                         .then(res => res.json())
                         .then(data => {
+                            if (currentFetchId !== fetchId) return; // Resultado viejo, ignorar
+
                             lista.innerHTML = "";
                             lista.classList.remove("hidden");
 
@@ -285,26 +275,22 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
 
                             data.forEach(equipo => {
+                                if (!equipo.nombre || !equipo.logo) return;
+
                                 const li = document.createElement("li");
                                 li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-2";
                                 li.innerHTML = `<img src="${equipo.logo}" class="w-4 h-4"><span>${equipo.nombre}</span>`;
                                 lista.appendChild(li);
 
                                 li.addEventListener("click", () => {
-                                    // Rellenar input solo con el nombre del equipo
-                                    const nombreEquipo = li.querySelector("span").textContent.trim();
-                                    input.value = nombreEquipo;
+                                    input.value = equipo.nombre;
 
-                                    // Ocultar lista
                                     lista.classList.add("hidden");
 
-                                    // Cambiar icono por escudo
                                     const iconoContenedor = document.getElementById(`icono-${inputId}`);
                                     const iconoContent = iconoContenedor.querySelector(".icon-content");
-                                    const escudo = li.querySelector("img");
-
-                                    if (iconoContent && escudo) {
-                                        iconoContent.innerHTML = `<img src="${escudo.src}" alt="${nombreEquipo}" class="w-10 h-8 rounded">`;
+                                    if (iconoContent) {
+                                        iconoContent.innerHTML = `<img src="${equipo.logo}" alt="${equipo.nombre}" class="w-10 h-8 rounded">`;
                                     }
                                 });
                             });
@@ -317,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         input.addEventListener("blur", () => {
-            setTimeout(() => lista.classList.add("hidden"), 200);
+            setTimeout(() => lista.classList.add("hidden"), 400);
         });
 
         input.addEventListener("focus", () => {
