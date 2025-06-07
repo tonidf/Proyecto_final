@@ -33,3 +33,14 @@ def get_equipo(equipo_id):
     total_rojas = total_tarjetas(red_cards)
 
     return render_template('equipo_individual.html', equipo=respuesta, equipo_cabecera=equipo_cabecera, total_amarillas=total_amarillas, total_rojas=total_rojas, clasificacion=clasificacion)
+
+@equipos_bp.route('/buscar_equipos')
+def buscar_equipos():
+    nombre = request.args.get('nombre', '').lower()
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT nombre, logo FROM equipos WHERE LOWER(nombre) LIKE %s LIMIT 10", ('%' + nombre + '%',))
+    resultados = cursor.fetchall()
+
+    equipos = [{"nombre": row[0], "logo": row[1]} for row in resultados]
+
+    return jsonify(equipos)
