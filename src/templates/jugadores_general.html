@@ -5,67 +5,71 @@
 {% block body %}
 <div class="min-h-screen flex flex-col items-center p-6 bg-gray-100 space-y-8">
 
-  <!-- 1. Select y tabla con los 5 mejores jugadores -->
-  <div class="bg-white rounded-2xl shadow-md p-6 w-full max-w-4xl">
-    <h2 class="text-red-600 text-xl font-bold mb-4 text-center">Top 5 jugadores por equipo</h2>
-    <div class="flex justify-center mb-4">
-      <select id="select-equipo" class="border rounded px-3 py-2 w-64">
-        <option selected disabled>Selecciona un equipo</option>
-        {% for equipo in equipos %}
-          <option value="{{ equipo.id }}">{{ equipo.nombre }}</option>
-        {% endfor %}
-      </select>
+    <!-- 1. Select y tabla con los 5 mejores jugadores -->
+    <div class="bg-white rounded-2xl shadow-md p-6 w-full max-w-4xl">
+        <h2 class="text-red-600 text-xl font-bold mb-4 text-center">Top 5 jugadores por equipo</h2>
+        <div class="flex justify-center mb-4">
+            <select id="select-equipo" class="border rounded px-3 py-2 w-64">
+                <option selected disabled value="">Selecciona un equipo</option>
+                {% for equipo in equipos %}
+                    <option value="{{ equipo[0] }}" data-logo="{{ equipo[2] }}">{{ equipo[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="equipo-info" class="mt-4 items-center justify-center gap-3 hidden">
+            <img id="logo-equipo" src="" alt="Logo del equipo" class="w-12 h-12 rounded-sm shadow" />
+            <span id="nombre-equipo" class="text-xl font-semibold text-gray-700"></span>
+        </div>
+
+        <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="border-b">
+            <th class="py-2 px-3 font-semibold">Pos</th>
+            <th class="py-2 px-3 font-semibold">Jugador</th>
+            <th class="py-2 px-3 font-semibold">Goles</th>
+            <th class="py-2 px-3 font-semibold">Asistencias</th>
+            <th class="py-2 px-3 font-semibold">Partidos</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-jugadores">
+            <!-- Aquí se insertarán los jugadores con JS -->
+        </tbody>
+        </table>
     </div>
 
-    <table class="w-full text-left border-collapse">
-      <thead>
-        <tr class="border-b">
-          <th class="py-2 px-3 font-semibold">Pos</th>
-          <th class="py-2 px-3 font-semibold">Jugador</th>
-          <th class="py-2 px-3 font-semibold">Goles</th>
-          <th class="py-2 px-3 font-semibold">Asistencias</th>
-          <th class="py-2 px-3 font-semibold">Partidos</th>
-        </tr>
-      </thead>
-      <tbody id="tabla-jugadores">
-        <!-- Aquí se insertarán los jugadores con JS -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 2. Buscador inteligente de jugadores -->
-  <div class="bg-white rounded-2xl shadow-md p-6 w-full max-w-2xl relative">
-    <h2 class="text-red-600 text-xl font-bold mb-4 text-center">Buscar jugador</h2>
-    <input type="text" id="buscador-jugadores" placeholder="Escribe el nombre del jugador"
-      class="w-full border rounded px-3 py-2" autocomplete="off">
-    <ul id="sugerencias-jugadores" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-56 overflow-y-auto hidden z-20">
-      <!-- Sugerencias de jugadores -->
-    </ul>
-  </div>
-
-  <!-- 3. Comparador de jugadores -->
-  <form method="get" action="/comparar-jugadores" class="bg-white rounded-2xl shadow-md p-6 w-full max-w-3xl flex flex-col items-center space-y-4">
-    <h2 class="text-red-600 text-xl font-bold mb-4">Comparador de estadísticas</h2>
-
-    <div class="w-full flex space-x-4 relative">
-      <div class="flex-1">
-        <label for="jugador1" class="block mb-1 font-semibold">Jugador 1</label>
-        <input type="text" id="jugador1" name="jugador1" placeholder="Jugador 1" autocomplete="off"
-          class="w-full border rounded px-3 py-2">
-        <ul id="sugerencias-jugador1" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
-      </div>
-      <div class="flex-1">
-        <label for="jugador2" class="block mb-1 font-semibold">Jugador 2</label>
-        <input type="text" id="jugador2" name="jugador2" placeholder="Jugador 2" autocomplete="off"
-          class="w-full border rounded px-3 py-2">
-        <ul id="sugerencias-jugador2" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
-      </div>
+    <!-- 2. Buscador inteligente de jugadores -->
+    <div class="bg-white rounded-2xl shadow-md p-6 w-full max-w-2xl relative">
+        <h2 class="text-red-600 text-xl font-bold mb-4 text-center">Buscar jugador</h2>
+        <input type="text" id="buscador-jugadores" placeholder="Escribe el nombre del jugador"
+        class="w-full border rounded px-3 py-2" autocomplete="off">
+        <ul id="sugerencias-jugadores" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-56 overflow-y-auto hidden z-20">
+        <!-- Sugerencias de jugadores -->
+        </ul>
     </div>
 
-    <button type="submit" class="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">
-      Comparar
-    </button>
-  </form>
+    <!-- 3. Comparador de jugadores -->
+    <form method="get" action="/comparar-jugadores" class="bg-white rounded-2xl shadow-md p-6 w-full max-w-3xl flex flex-col items-center space-y-4">
+        <h2 class="text-red-600 text-xl font-bold mb-4">Comparador de estadísticas</h2>
+
+        <div class="w-full flex space-x-4 relative">
+        <div class="flex-1">
+            <label for="jugador1" class="block mb-1 font-semibold">Jugador 1</label>
+            <input type="text" id="jugador1" name="jugador1" placeholder="Jugador 1" autocomplete="off"
+            class="w-full border rounded px-3 py-2">
+            <ul id="sugerencias-jugador1" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
+        </div>
+        <div class="flex-1">
+            <label for="jugador2" class="block mb-1 font-semibold">Jugador 2</label>
+            <input type="text" id="jugador2" name="jugador2" placeholder="Jugador 2" autocomplete="off"
+            class="w-full border rounded px-3 py-2">
+            <ul id="sugerencias-jugador2" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
+        </div>
+        </div>
+
+        <button type="submit" class="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">
+        Comparar
+        </button>
+    </form>
 
 </div>
 
@@ -73,146 +77,159 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   // --- 1. Cargar top 5 jugadores al cambiar equipo ---
-  const selectEquipo = document.getElementById("select-equipo");
-  const tablaJugadores = document.getElementById("tabla-jugadores");
+    const selectEquipo = document.getElementById("select-equipo");
+    const tablaJugadores = document.getElementById("tabla-jugadores");
 
-  function cargarTop5(idEquipo) {
-    fetch(`/api/jugadores_top5?equipo_id=${encodeURIComponent(idEquipo)}`)
-      .then(res => res.json())
-      .then(data => {
-        tablaJugadores.innerHTML = "";
-        if(data.length === 0){
-          tablaJugadores.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-gray-500">No hay datos para este equipo.</td></tr>`;
-          return;
-        }
-        data.forEach((jugador, idx) => {
-          const tr = document.createElement("tr");
-          tr.className = idx % 2 === 0 ? "bg-gray-50" : "";
-          tr.innerHTML = `
-            <td class="py-2 px-3 font-semibold">${idx + 1}</td>
-            <td class="py-2 px-3">${jugador.nombre}</td>
-            <td class="py-2 px-3 text-center">${jugador.goles}</td>
-            <td class="py-2 px-3 text-center">${jugador.asistencias}</td>
-            <td class="py-2 px-3 text-center">${jugador.partidos}</td>
-          `;
-          tablaJugadores.appendChild(tr);
-        });
-      }).catch(() => {
-        tablaJugadores.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-red-600">Error al cargar datos.</td></tr>`;
-      });
-  }
-
-  selectEquipo.addEventListener("change", () => {
-    if(selectEquipo.value) {
-      cargarTop5(selectEquipo.value);
-    }
-  });
-
-  // --- 2. Buscador inteligente jugadores ---
-  const inputBuscador = document.getElementById("buscador-jugadores");
-  const listaSugerencias = document.getElementById("sugerencias-jugadores");
-  let timeoutBusqueda = null;
-
-  inputBuscador.addEventListener("input", () => {
-    clearTimeout(timeoutBusqueda);
-    const valor = inputBuscador.value.trim();
-
-    if(valor.length < 2){
-      listaSugerencias.classList.add("hidden");
-      listaSugerencias.innerHTML = "";
-      return;
-    }
-
-    timeoutBusqueda = setTimeout(() => {
-      fetch(`/buscar_jugadores?nombre=${encodeURIComponent(valor)}`)
+    function cargarTop5(idEquipo) {
+        fetch(`/api/jugadores_top5?equipo_id=${encodeURIComponent(idEquipo)}`)
         .then(res => res.json())
         .then(data => {
-          listaSugerencias.innerHTML = "";
-          if(data.length === 0){
-            listaSugerencias.innerHTML = `<li class="px-3 py-2 text-gray-500">Sin resultados</li>`;
-            listaSugerencias.classList.remove("hidden");
-            return;
-          }
-
-          data.forEach(jugador => {
-            const li = document.createElement("li");
-            li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
-            li.textContent = jugador.nombre;
-            listaSugerencias.appendChild(li);
-
-            li.addEventListener("click", () => {
-              inputBuscador.value = jugador.nombre;
-              listaSugerencias.classList.add("hidden");
-            });
-          });
-          listaSugerencias.classList.remove("hidden");
-        });
-    }, 600);
-  });
-
-  inputBuscador.addEventListener("blur", () => {
-    setTimeout(() => listaSugerencias.classList.add("hidden"), 200);
-  });
-
-  inputBuscador.addEventListener("focus", () => {
-    if(listaSugerencias.children.length > 0){
-      listaSugerencias.classList.remove("hidden");
-    }
-  });
-
-  // --- 3. Comparador jugadores (2 inputs con buscadores inteligentes) ---
-  ["jugador1", "jugador2"].forEach(id => {
-    const input = document.getElementById(id);
-    const lista = document.getElementById(`sugerencias-${id}`);
-    let timeout = null;
-
-    input.addEventListener("input", () => {
-      clearTimeout(timeout);
-      const valor = input.value.trim();
-
-      if(valor.length < 2){
-        lista.classList.add("hidden");
-        lista.innerHTML = "";
-        return;
-      }
-
-      timeout = setTimeout(() => {
-        fetch(`/buscar_jugadores?nombre=${encodeURIComponent(valor)}`)
-          .then(res => res.json())
-          .then(data => {
-            lista.innerHTML = "";
+            tablaJugadores.innerHTML = "";
             if(data.length === 0){
-              lista.innerHTML = `<li class="px-3 py-2 text-gray-500">Sin resultados</li>`;
-              lista.classList.remove("hidden");
-              return;
+            tablaJugadores.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-gray-500">No hay datos para este equipo.</td></tr>`;
+            return;
+            }
+            data.forEach((jugador, idx) => {
+            const tr = document.createElement("tr");
+            tr.className = idx % 2 === 0 ? "bg-gray-50" : "";
+            tr.innerHTML = `
+                <td class="py-2 px-3 font-semibold">${idx + 1}</td>
+                <td class="py-2 px-3">${jugador.nombre}</td>
+                <td class="py-2 px-3 text-center">${jugador.goles}</td>
+                <td class="py-2 px-3 text-center">${jugador.asistencias}</td>
+                <td class="py-2 px-3 text-center">${jugador.partidos}</td>
+            `;
+            tablaJugadores.appendChild(tr);
+            });
+        }).catch(() => {
+            tablaJugadores.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-red-600">Error al cargar datos.</td></tr>`;
+        });
+    }
+
+    selectEquipo.addEventListener("change", () => {
+        if(selectEquipo.value) {
+        cargarTop5(selectEquipo.value);
+        }
+    });
+
+    // --- 2. Buscador inteligente jugadores ---
+    const inputBuscador = document.getElementById("buscador-jugadores");
+    const listaSugerencias = document.getElementById("sugerencias-jugadores");
+    let timeoutBusqueda = null;
+
+    inputBuscador.addEventListener("input", () => {
+        clearTimeout(timeoutBusqueda);
+        const valor = inputBuscador.value.trim();
+
+        if(valor.length < 2){
+        listaSugerencias.classList.add("hidden");
+        listaSugerencias.innerHTML = "";
+        return;
+        }
+
+        timeoutBusqueda = setTimeout(() => {
+        fetch(`/buscar_jugadores?nombre=${encodeURIComponent(valor)}`)
+            .then(res => res.json())
+            .then(data => {
+            listaSugerencias.innerHTML = "";
+            if(data.length === 0){
+                listaSugerencias.innerHTML = `<li class="px-3 py-2 text-gray-500">Sin resultados</li>`;
+                listaSugerencias.classList.remove("hidden");
+                return;
             }
 
             data.forEach(jugador => {
-              const li = document.createElement("li");
-              li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
-              li.textContent = jugador.nombre;
-              lista.appendChild(li);
+                const li = document.createElement("li");
+                li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
+                li.textContent = jugador.nombre;
+                listaSugerencias.appendChild(li);
 
-              li.addEventListener("click", () => {
-                input.value = jugador.nombre;
-                lista.classList.add("hidden");
-              });
+                li.addEventListener("click", () => {
+                inputBuscador.value = jugador.nombre;
+                listaSugerencias.classList.add("hidden");
+                });
             });
+            listaSugerencias.classList.remove("hidden");
+            });
+        }, 600);
+    });
+
+    inputBuscador.addEventListener("blur", () => {
+        setTimeout(() => listaSugerencias.classList.add("hidden"), 200);
+    });
+
+    inputBuscador.addEventListener("focus", () => {
+        if(listaSugerencias.children.length > 0){
+        listaSugerencias.classList.remove("hidden");
+        }
+    });
+
+    // --- 3. Comparador jugadores (2 inputs con buscadores inteligentes) ---
+    ["jugador1", "jugador2"].forEach(id => {
+        const input = document.getElementById(id);
+        const lista = document.getElementById(`sugerencias-${id}`);
+        let timeout = null;
+
+        input.addEventListener("input", () => {
+        clearTimeout(timeout);
+        const valor = input.value.trim();
+
+        if(valor.length < 2){
+            lista.classList.add("hidden");
+            lista.innerHTML = "";
+            return;
+        }
+
+        timeout = setTimeout(() => {
+            fetch(`/buscar_jugadores?nombre=${encodeURIComponent(valor)}`)
+            .then(res => res.json())
+            .then(data => {
+                lista.innerHTML = "";
+                if(data.length === 0){
+                lista.innerHTML = `<li class="px-3 py-2 text-gray-500">Sin resultados</li>`;
+                lista.classList.remove("hidden");
+                return;
+                }
+
+                data.forEach(jugador => {
+                const li = document.createElement("li");
+                li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
+                li.textContent = jugador.nombre;
+                lista.appendChild(li);
+
+                li.addEventListener("click", () => {
+                    input.value = jugador.nombre;
+                    lista.classList.add("hidden");
+                });
+                });
+                lista.classList.remove("hidden");
+            });
+        }, 600);
+        });
+
+        input.addEventListener("blur", () => {
+        setTimeout(() => lista.classList.add("hidden"), 200);
+        });
+
+        input.addEventListener("focus", () => {
+        if(lista.children.length > 0){
             lista.classList.remove("hidden");
-          });
-      }, 600);
+        }
+        });
     });
+    const equipoInfo = document.getElementById('equipo-info');
 
-    input.addEventListener("blur", () => {
-      setTimeout(() => lista.classList.add("hidden"), 200);
-    });
+    document.getElementById('select-equipo').addEventListener('change', function () {
+    const selected = this.options[this.selectedIndex];
+    const logo = selected.dataset.logo;
+    const nombre = selected.text;
 
-    input.addEventListener("focus", () => {
-      if(lista.children.length > 0){
-        lista.classList.remove("hidden");
-      }
+    document.getElementById('logo-equipo').src = logo;
+    document.getElementById('nombre-equipo').textContent = nombre;
+
+    equipoInfo.classList.remove('hidden');
+    equipoInfo.classList.add('flex');
     });
-  });
 
 });
 </script>

@@ -286,3 +286,102 @@ def obtener_team_id_por_nombre(nombre):
 
 def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
+
+
+def obtener_jugadores_por_equipo(equipo_id):
+    jugadores = []
+    page = 1
+    per_page = 50  # máximo permitido por la API (ajustar según documentación)
+    
+    while True:
+        params = {
+            'team': equipo_id,
+            'page': page,
+            'per_page': per_page
+        }
+        response = requests.get(BASE_URL, headers=HEADERS, params=params)
+        if response.status_code != 200:
+            print(f"Error en la API: {response.status_code}")
+            break
+        
+        data = response.json()
+        
+        # Extraemos los jugadores de la respuesta
+        jugadores_pagina = data.get('response', [])
+        
+        if not jugadores_pagina:
+            # No hay más jugadores
+            break
+        
+        for jugador in jugadores_pagina:
+            # Ajusta esta parte según la estructura real de la API
+            jugador_info = {
+                'nombre': jugador['player']['name'],
+                'goles': jugador['statistics'][0]['goals']['total'] or 0,
+                'asistencias': jugador['statistics'][0]['goals']['assists'] or 0,
+                'partidos': jugador['statistics'][0]['games']['appearences'] or 0
+            }
+            jugadores.append(jugador_info)
+        
+        # Revisa si hay más páginas, si no, termina
+        # En esta API puedes calcularlo si 'paging' está disponible
+        paging = data.get('paging', {})
+        total_pages = paging.get('total', 1)
+        if page >= total_pages:
+            break
+        
+        page += 1
+    print("ESTOS SON LOS JUGADORES:", jugadores)
+    return jugadores
+
+def buscar_jugadores_por_nombre(nombre):
+    url = 'https://v3.football.api-sports.io/players'
+    params = {
+        'search': nombre,
+        'season': 2023
+    }
+
+    response = requests.get(url, headers=HEADERS, params=params)
+    data = response.json()
+
+    jugadores = []
+    for item in data['response']:
+        jugadores.append({
+            'nombre': item['player']['name']
+        })
+
+    return jugadores
+
+def obtener_estadisticas_jugador(nombre):
+    url = 'https://v3.football.api-sports.io/players'
+    params = {
+        'search': nombre,
+        'season': 2023
+    }
+
+    response = requests.get(url, headers=HEADERS, params=params)
+    data = response.json()
+
+    if not data['response']:
+        return None
+
+    jugador = data['response'][0]
+    stats = jugador['statistics'][0]
+
+    return {
+        'nombre': jugador['player']['name'],
+        'edad': jugador['player']['age'],
+        'posicion': stats['games']['position'],
+        'equipo': stats['team']['name'],
+        'goles': stats['goals']['total'] or 0,
+        'asistencias': stats['goals']['assists'] or 0,
+        'partidos': stats['games']['appearences'] or 0,
+        'imagen': jugador['player']['photo']
+    }
+
+def obtener_todos_los_equipos():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT api_id, nombre, logo FROM equipos ORDER BY nombre")
+    equipos = cursor.fetchall()
+    cursor.close()
+    return equipos

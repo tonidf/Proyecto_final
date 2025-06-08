@@ -16,12 +16,14 @@
             <span class="text-red-600 font-bold text-2xl">TONISCORE</span>
 
             <div class="justify-around w-60 items-center flex space-x-9 text-4xl text-black">
-                <div class=" cursor-pointer relative group inline-block">
-                    <i class="fas fa-male cursor-pointer hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
-                    <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
-                        Jugadores
+                <a href="{{url_for('players.jugadores_general')}}">
+                    <div class=" cursor-pointer relative group inline-block">
+                        <i class="fas fa-male cursor-pointer hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
+                        <div class="absolute bottom-0 left-1/2 translate-y-full -translate-x-1/2 mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10">
+                            Jugadores
+                        </div>
                     </div>
-                </div>
+                </a>
                 <a href="{{ url_for('equipos.equipos') }}">
                     <div class=" cursor-pointer relative group inline-block">
                         <i class="fas fa-shield-alt cursor-pointer hover:text-white hover:bg-red-600 px-3 py-2 rounded-lg"></i>
