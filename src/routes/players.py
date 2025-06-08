@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, url_for
 import requests
 import os
-from api_football import obtener_jugadores_por_equipo, buscar_jugadores_por_nombre, obtener_estadisticas_jugador, obtener_todos_los_equipos
+from api_football import obtener_jugadores_por_equipo, buscar_jugadores_por_nombre, obtener_estadisticas_jugador, obtener_todos_los_equipos, test_api_key
 
 API_KEY = os.getenv('API_KEY')
 
@@ -22,6 +22,7 @@ def buscar_jugador(nombre):
 
 @players_bp.route('/jugadores/general')
 def jugadores_general():
+    test_api_key()  # Verifica si la clave API es válida
     equipos = obtener_todos_los_equipos()  # Implementa esta función para obtener todos los equipos
     return render_template('jugadores_general.html', equipos=equipos)
 
@@ -29,6 +30,7 @@ def jugadores_general():
 @players_bp.route('/api/jugadores_top5')
 def jugadores_top5():
     equipo_id = request.args.get('equipo_id')
+    print("Equipo ID recibido:", equipo_id)
     if not equipo_id:
         return jsonify([])
 

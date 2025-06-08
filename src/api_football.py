@@ -11,10 +11,15 @@ CACHE_DURATION_HOURS = 24
 API_KEY = os.getenv('API_KEY')  
 BASE_URL = 'https://v3.football.api-sports.io'
 HEADERS = {
-    'x-apisports-key': API_KEY
+    'x-apisports-key': API_KEY,
+    'User-Agent': 'FutStats-TFG/1.0'
 }
 
-
+def test_api_key():
+    url = "https://v3.football.api-sports.io/status"
+    response = requests.get(url, headers=HEADERS)
+    print("Código:", response.status_code)
+    print("Respuesta:", response.json())
 
 # Esta función intenta recuperar estadísticas cacheadas de la base de datos
 def get_cached_statistics(team_id, league_id, season):
@@ -288,49 +293,52 @@ def total_tarjetas(cards_data):
     return sum(v['total'] for v in cards_data.values() if v['total'] is not None)
 
 
-def obtener_jugadores_por_equipo(equipo_id):
+def obtener_jugadores_por_equipo(equipo_id, season=2023):
     jugadores = []
     page = 1
-    per_page = 50  # máximo permitido por la API (ajustar según documentación)
-    
+    url = f"{BASE_URL}/players"
+    print("API_KEY:", API_KEY)  # Para depuración, asegúrate de que la clave se carga correctamente
+
     while True:
         params = {
             'team': equipo_id,
-            'page': page,
-            'per_page': per_page
+            'season': season,
+            'page': page
         }
-        response = requests.get(BASE_URL, headers=HEADERS, params=params)
+        print("HEADERS que se envían:", HEADERS)
+        response = requests.get(url, headers=HEADERS, params=params)
         if response.status_code != 200:
             print(f"Error en la API: {response.status_code}")
+            print(response.text)
             break
         
         data = response.json()
-        
-        # Extraemos los jugadores de la respuesta
         jugadores_pagina = data.get('response', [])
-        
+        print(json.dumps(data, indent=2))
+
         if not jugadores_pagina:
-            # No hay más jugadores
             break
         
         for jugador in jugadores_pagina:
-            # Ajusta esta parte según la estructura real de la API
+            stats = jugador.get('statistics', [{}])[0]
+            goles = stats.get('goals', {}).get('total')
+            asistencias = stats.get('goals', {}).get('assists')
+            partidos = stats.get('games', {}).get('appearences')
+
             jugador_info = {
-                'nombre': jugador['player']['name'],
-                'goles': jugador['statistics'][0]['goals']['total'] or 0,
-                'asistencias': jugador['statistics'][0]['goals']['assists'] or 0,
-                'partidos': jugador['statistics'][0]['games']['appearences'] or 0
+                'nombre': jugador.get('player', {}).get('name', 'Desconocido'),
+                'goles': goles if goles is not None else 0,
+                'asistencias': asistencias if asistencias is not None else 0,
+                'partidos': partidos if partidos is not None else 0
             }
             jugadores.append(jugador_info)
         
-        # Revisa si hay más páginas, si no, termina
-        # En esta API puedes calcularlo si 'paging' está disponible
-        paging = data.get('paging', {})
-        total_pages = paging.get('total', 1)
+        total_pages = data.get('paging', {}).get('total', 1)
         if page >= total_pages:
             break
         
         page += 1
+
     print("ESTOS SON LOS JUGADORES:", jugadores)
     return jugadores
 
