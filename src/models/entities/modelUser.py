@@ -29,24 +29,26 @@ class ModelUser:
     def Login_user(cls, email, password):
         try:
             cur = mysql.connection.cursor()
-            cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
+            cur.execute("SELECT * FROM usuarios WHERE correo = %s", (email,))
             data = cur.fetchone()
 
             if data:
                 id = data[0]
                 nombre = data[1]
-                email = data[2]
-                hashed_pass = data[3]
-
+                email = data[3]
+                hashed_pass = data[2]
                 user = User(id, nombre, email, hashed_pass)
 
                 if user.check_password(password, hashed_pass):
                     return user
                 else:
                     flash("Contraseña incorrecta", "error")
+                    print("Contraseña incorrecta")
                     return None
+                    
             else:
                 flash("Usuario no encontrado", "error")
+                print("Usuario no encontrado")
                 return None
         except Exception as e:
             print(e)
@@ -57,16 +59,17 @@ class ModelUser:
     def register_user(cls, nombre, email, password):
         try:
             cur = mysql.connection.cursor()
-            cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
+            cur.execute("SELECT * FROM usuarios WHERE correo = %s", (email,))
             existing_user = cur.fetchone()
             
             if existing_user:
                 flash("El email ya está registrado", "error")
+                print("El email ya está registrado")
                 return None
 
             hashed_pass = User.set_password(User, password)
             cur.execute(
-                "INSERT INTO usuarios (nombre, email, password) VALUES (%s, %s, %s)",
+                "INSERT INTO usuarios (nombre_completo, correo, contrasena) VALUES (%s, %s, %s)",
                 (nombre, email, hashed_pass)
             )
             mysql.connection.commit()
@@ -74,7 +77,7 @@ class ModelUser:
             user_id = cur.lastrowid
             cur.close()
 
-            return User(id=user_id, nombre=nombre, email=email, password=hashed_pass)
+            return User(id=user_id, name=nombre, email=email, password=hashed_pass)
 
         except Exception as e:
             print(e)

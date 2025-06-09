@@ -1,0 +1,12 @@
+{% extends './layouts/layout.html' %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block body %}
+<div class="max-w-md mx-auto mt-12 p-6 bg-white rounded shadow">
+    <h1 class="text-3xl font-bold mb-4">Perfil de {{ user.nombre }}</h1>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>ID:</strong> {{ user.id }}</p>
+    <!-- Puedes añadir más datos o botones aquí -->
+</div>
+{% endblock %}

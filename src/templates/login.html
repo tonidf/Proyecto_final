@@ -28,7 +28,7 @@
 
             <div>
                 {{ form.submit(class="w-full bg-red-600 text-white font-semibold py-2 rounded hover:bg-red-700 transition") }}
-                <span>No tienes cuenta? <a href="#">Registrate</a></span>
+                <span>No tienes cuenta? <a href="{{ url_for('auth.register') }}">Registrate</a></span>
             </div>
             
         </form>

@@ -41,7 +41,12 @@ CREATE TABLE jugadores (
     id INTEGER PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     posicion VARCHAR(50),
-    equipo_id INTEGER
+    equipo_id INTEGER,
+    nombre_lower VARCHAR(100) UNIQUE NOT NULL,
+    foto_url VARCHAR(255),
+    goles INTEGER DEFAULT 0,
+    asistencias INTEGER DEFAULT 0,
+    partidos INTEGER DEFAULT 0
 );
 
 CREATE TABLE partidos (
