@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, url_for
 import requests
 import os
-from api_football import obtener_jugadores_por_equipo, buscar_jugadores_por_nombre, obtener_estadisticas_jugador, obtener_todos_los_equipos, test_api_key
+from api_football import obtener_jugadores_por_equipo, buscar_jugadores_por_nombre, obtener_estadisticas_jugador, obtener_todos_los_equipos, obtener_foto_jugador
 
 API_KEY = os.getenv('API_KEY')
 
@@ -21,8 +21,7 @@ def buscar_jugador(nombre):
     return jsonify(data)
 
 @players_bp.route('/jugadores/general')
-def jugadores_general():
-    test_api_key()  # Verifica si la clave API es válida
+def jugadores_general(): 
     equipos = obtener_todos_los_equipos()  # Implementa esta función para obtener todos los equipos
     return render_template('jugadores_general.html', equipos=equipos)
 
@@ -49,19 +48,30 @@ def jugadores_top5():
     reverse=True
     )[:5]
 
+    for jugador in top5:
+        foto = obtener_foto_jugador(jugador['nombre'])
+        if not foto:
+            jugador['foto'] = url_for('static', filename='img/profile_default.webp')
+        else:
+            jugador['foto'] = foto
+
     return jsonify(top5)
 
-@players_bp.route('/buscar_jugadores')
-def buscar_jugadores():
-    nombre = request.args.get('nombre', '').strip().lower()
-    if not nombre or len(nombre) < 2:
-        return jsonify([])
+# @players_bp.route('/buscar_jugadores')
+# def buscar_jugadores():
+#     nombre = request.args.get('nombre', '').strip()
+#     if not nombre or len(nombre) < 2:
+#         return jsonify([])  # No buscamos si menos de 2 letras
 
-    # Aquí deberías consultar tu base de datos o API externa
-    jugadores = buscar_jugadores_por_nombre(nombre)  # Implementa esta función
+#     jugadores = obtener_todos_los_jugadores()  # Tu función para obtener todos los jugadores
 
-    resultados = [{'nombre': jugador['nombre']} for jugador in jugadores]
-    return jsonify(resultados)
+#     # Filtrar jugadores que contengan el texto buscado (insensible a mayúsculas)
+#     resultado = [j for j in jugadores if nombre.lower() in j['nombre'].lower()]
+
+#     # Puedes limitar la cantidad de resultados para no saturar
+#     resultado = resultado[:10]
+
+#     return jsonify(resultado)
 
 @players_bp.route('/comparar-jugadores')
 def comparar_jugadores():

@@ -1,3 +1,4 @@
+from flask import url_for
 import requests
 import os
 import json
@@ -393,3 +394,20 @@ def obtener_todos_los_equipos():
     equipos = cursor.fetchall()
     cursor.close()
     return equipos
+
+def obtener_foto_jugador(nombre_jugador):
+    url = f"https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p={nombre_jugador}"
+    try:
+        response = requests.get(url)
+        if response.status_code != 200:
+            return url_for('static', filename='img/profile_default.webp')
+        
+        data = response.json()
+        jugadores = data.get('player', [])
+        for jugador in jugadores:
+            # Comparación estricta por nombre (puedes usar .lower() si quieres que sea case-insensitive)
+            if jugador.get('strPlayer') == nombre_jugador and jugador.get('strCutout'):
+                return jugador['strCutout']
+    except Exception:
+        pass
+    return url_for('static', filename='img/profile_default.webp')
