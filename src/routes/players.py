@@ -92,11 +92,11 @@ def buscar_jugador():
     }
 
     response = requests.get(url, headers=headers)
-
     if response.status_code != 200:
         return jsonify([])
 
     data = response.json()
+    print(f"Datos de la búsqueda: {data}")
     jugadores = data.get("response", [])
 
     resultados = []
@@ -126,5 +126,6 @@ def comparar_jugadores():
 
     jugador1 = obtener_estadisticas_jugador(nombre1)  # Implementa esta función
     jugador2 = obtener_estadisticas_jugador(nombre2)
-
+    print(f"Jugador 1: {jugador1}")
+    print(f"Jugador 2: {jugador2}")
     return render_template('comparar_jugadores.html', jugador1=jugador1, jugador2=jugador2)

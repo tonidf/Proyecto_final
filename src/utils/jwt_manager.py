@@ -1,7 +1,8 @@
 import jwt
 import datetime
-from flask import current_app
 import os
+from functools import wraps
+from flask import request, jsonify
 
 JWT_KEY = os.getenv('JWT_KEY')
 
@@ -17,8 +18,22 @@ def generar_token(usuario_id):
 def verificar_token(token):
     try:
         payload = jwt.decode(token, JWT_KEY, algorithms=['HS256'])
-        print(f"Payload decodificado: {payload}")
         return payload['sub']
     except Exception as e:
         print(f"Error decodificando token: {e}")
         return None
+    
+
+def jwt_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.cookies.get('access_token')
+        if not token:
+            return jsonify({"message": "Token faltante"}), 401
+
+        user_id = verificar_token(token)
+        if not user_id:
+            return jsonify({"message": "Token inválido o expirado"}), 401
+
+        return f(user_id=user_id, *args, **kwargs)
+    return decorated

@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         clearTimeout(timeoutBusqueda);
         const valor = inputBuscador.value.trim();
 
-        if(valor.length < 2){
+        if(valor.length < 4){
         listaSugerencias.classList.add("hidden");
         listaSugerencias.innerHTML = "";
         return;
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
         clearTimeout(timeout);
         const valor = input.value.trim();
 
-        if(valor.length < 2){
+        if(valor.length < 4){
             lista.classList.add("hidden");
             lista.innerHTML = "";
             return;
@@ -204,12 +204,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const li = document.createElement("li");
                 li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
                 li.textContent = jugador.nombre;
-                lista.appendChild(li);
-
-                li.addEventListener("click", () => {
+                li.addEventListener("mousedown", (e) => {
+                    e.preventDefault(); // evita que se dispare blur antes del click
                     input.value = jugador.nombre;
                     lista.classList.add("hidden");
                 });
+                lista.appendChild(li);
                 });
                 lista.classList.remove("hidden");
             });

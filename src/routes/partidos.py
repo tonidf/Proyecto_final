@@ -8,6 +8,7 @@ def general():
     rounds = get_rounds_from_cache()
 
     clasificacion = get_clasificacion()
+    print(clasificacion)
     if not rounds:
         rounds = fetch_and_cache_rounds()
 

@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response, g
+from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response, g, jsonify
 from models.entities.modelUser import ModelUser
 from werkzeug.security import check_password_hash
 from forms.login_form import LoginForm
 from forms.register_form import RegisterForm
-from utils.jwt_manager import generar_token, verificar_token
+from utils.jwt_manager import generar_token, verificar_token, jwt_required
+from extensions import mysql
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -75,6 +76,50 @@ def profile():
         return redirect(url_for('auth.login'))
 
     return render_template('profile.html', user=user)
+
+@auth_bp.route('/api/eliminar-cuenta', methods=['DELETE'])
+@jwt_required
+def eliminar_cuenta(user_id):
+    token = request.cookies.get('access_token')
+    print(f"Token recibido: {token}")
+    if not token:
+        return jsonify({"message": "Token no encontrado"}), 401
+
+    user_id = verificar_token(token)
+    if not user_id:
+        return jsonify({"message": "Token inválido o expirado"}), 401
+    
+    print(f"ID de usuario obtenido del token: {user_id}")
+
+    # Eliminar el usuario de la base de datos
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM usuarios WHERE id = %s", (user_id,))
+    mysql.connection.commit()
+    cursor.close()
+
+    response = jsonify({"message": "Cuenta eliminada correctamente"})
+    response.set_cookie('access_token', '', expires=0)  # Borra la cookie
+    return response
+    
+@auth_bp.route('/api/editar-perfil', methods=['PUT'])
+@jwt_required
+def editar_perfil(user_id):
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+
+    if not name or not email:
+        return jsonify({"message": "Nombre y correo son requeridos"}), 400
+
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("UPDATE users SET name = %s, email = %s WHERE id = %s", (name, email, user_id))
+        mysql.connection.commit()
+        cursor.close()
+        return jsonify({"message": "Perfil actualizado correctamente"}), 200
+    except Exception as e:
+        print("Error al editar perfil:", e)
+        return jsonify({"message": "Error al actualizar perfil"}), 500
 
 @auth_bp.route('/logout')
 def logout():
