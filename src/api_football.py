@@ -328,6 +328,7 @@ def obtener_jugadores_por_equipo(equipo_id, season=2023):
             partidos = stats.get('games', {}).get('appearences')
 
             jugador_info = {
+                'id': jugador.get('player', {}).get('id'),
                 'nombre': jugador.get('player', {}).get('name', 'Desconocido'),
                 'goles': goles if goles is not None else 0,
                 'asistencias': asistencias if asistencias is not None else 0,

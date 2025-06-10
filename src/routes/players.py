@@ -14,16 +14,21 @@ API_ID_A_INTERNO = {
     798: 20
 }
 
-# @players_bp.route('/buscar/<nombre>')
-# def buscar_jugador(nombre):
-#     url = "https://v3.football.api-sports.io/players?search={}&season=2023".format(nombre)
-#     headers = {
-#         "x-apisports-key": API_KEY
-#     }
+@players_bp.route('/jugador/<int:jugador_id>')
+def jugador_por_id(jugador_id):
+    url = f"https://v3.football.api-sports.io/players?id={jugador_id}&season=2023"
+    headers = {
+        "x-apisports-key": API_KEY
+    }
 
-#     response = requests.get(url, headers=headers)
-#     data = response.json()
-#     return jsonify(data)
+    response = requests.get(url, headers=headers)
+    data = response.json()
+
+    if not data["response"]:
+        return render_template("jugador_no_encontrado.html")
+
+    jugador = data["response"][0]
+    return render_template("jugador_unico.html", jugador=jugador)
 
 @players_bp.route('/jugadores/general')
 def jugadores_general(): 
@@ -56,9 +61,9 @@ def jugadores_top5():
     lista_a_ordenar = jugadores_con_contribuciones if jugadores_con_contribuciones else jugadores
 
     top5 = sorted(
-        lista_a_ordenar,
-        key=lambda x: (x['goles'] + x['asistencias']),
-        reverse=True
+    lista_a_ordenar,
+    key=lambda x: (x['goles'] + x['asistencias']),
+    reverse=True
     )[:5]
 
     for jugador in top5:
@@ -67,6 +72,7 @@ def jugadores_top5():
             jugador['foto'] = url_for('static', filename='img/profile_default.webp')
         else:
             jugador['foto'] = foto
+        # Asegúrate que jugador tiene 'id' ya en la data; si no, obténlo aquí.
 
     return jsonify(top5)
 
@@ -76,7 +82,7 @@ def jugadores_top5():
 @players_bp.route('/buscar_jugadores')
 def buscar_jugador():
     nombre = request.args.get('nombre', '').strip()
-    if len(nombre) < 2:
+    if len(nombre) < 4:
         return jsonify([])
 
     url = f"https://v3.football.api-sports.io/players?search={nombre}&season=2023&league=140"
@@ -90,18 +96,24 @@ def buscar_jugador():
         return jsonify([])
 
     data = response.json()
-    print(f"Datos obtenidos: {data}")  # Para depuración
     jugadores = data.get("response", [])
 
-    nombres_unicos = []
+    resultados = []
     ya_vistos = set()
     for j in jugadores:
-        nombre_jugador = j.get("player", {}).get("name")
-        if nombre_jugador and nombre_jugador not in ya_vistos:
-            nombres_unicos.append({"nombre": nombre_jugador})
+        jugador_data = j.get("player", {})
+        nombre_jugador = jugador_data.get("name")
+        id_jugador = jugador_data.get("id")
+
+        if nombre_jugador and id_jugador and nombre_jugador not in ya_vistos:
+            resultados.append({
+                "id": id_jugador,
+                "nombre": nombre_jugador
+            })
             ya_vistos.add(nombre_jugador)
 
-    return jsonify(nombres_unicos[:10])
+    return jsonify(resultados[:10])
+
 
 @players_bp.route('/comparar-jugadores')
 def comparar_jugadores():

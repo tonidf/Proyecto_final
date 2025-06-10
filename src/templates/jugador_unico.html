@@ -1,0 +1,39 @@
+{% extends './layouts/layout.html' %}
+
+{% block title %}Jugador: {{ jugador.player.name }}{% endblock %}
+
+{% block body %}
+<div class="max-w-xl mx-auto p-6 bg-white rounded shadow mt-8">
+    <h1 class="text-3xl font-bold text-red-600 mb-4">{{ jugador.player.name }}</h1>
+
+    <div class="flex items-center space-x-4 mb-4">
+        <img src="{{ jugador.player.photo }}" alt="{{ jugador.player.name }}" class="w-24 h-24 rounded-full object-cover shadow" />
+        <div>
+            <p><strong>Edad:</strong> {{ jugador.player.age }}</p>
+            <p><strong>Nacionalidad:</strong> {{ jugador.player.nationality }}</p>
+            <p><strong>Posición:</strong> {{ jugador.statistics[0].games.position }}</p>
+            <p><strong>Equipo:</strong> {{ jugador.statistics[0].team.name }}</p>
+        </div>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-2">Estadísticas temporada 2023</h2>
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border border-gray-300 px-3 py-1">Partidos</th>
+                <th class="border border-gray-300 px-3 py-1">Goles</th>
+                <th class="border border-gray-300 px-3 py-1">Asistencias</th>
+                <th class="border border-gray-300 px-3 py-1">Minutos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].games.appearences }}</td>
+                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].goals.total }}</td>
+                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].goals.assists }}</td>
+                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].games.minutes }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

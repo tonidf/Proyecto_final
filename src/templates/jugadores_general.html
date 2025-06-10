@@ -86,12 +86,18 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             tablaJugadores.innerHTML = "";
             if(data.length === 0){
-            tablaJugadores.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-gray-500">No hay datos para este equipo.</td></tr>`;
-            return;
+                tablaJugadores.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-gray-500">No hay datos para este equipo.</td></tr>`;
+                return;
             }
             data.forEach((jugador, idx) => {
                 const tr = document.createElement("tr");
-                tr.className = idx % 2 === 0 ? "bg-gray-50" : "";
+                tr.className = idx % 2 === 0 ? "bg-gray-50 cursor-pointer" : "cursor-pointer";
+                
+                // Añadimos click a toda la fila para ir al perfil del jugador
+                tr.addEventListener("click", () => {
+                    window.location.href = `/jugador/${jugador.id}`;
+                });
+
                 tr.innerHTML = `
                     <td class="py-2 px-3 font-semibold">${idx + 1}</td>
                     <td class="py-2 px-3 flex items-center space-x-3">
@@ -134,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`/buscar_jugadores?nombre=${encodeURIComponent(valor)}`)
             .then(res => res.json())
             .then(data => {
+                console.log(data)
             listaSugerencias.innerHTML = "";
             if(data.length === 0){
                 listaSugerencias.innerHTML = `<li class="px-3 py-2 text-gray-500">Sin resultados</li>`;
@@ -145,12 +152,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const li = document.createElement("li");
                 li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
                 li.textContent = jugador.nombre;
-                listaSugerencias.appendChild(li);
 
                 li.addEventListener("click", () => {
-                inputBuscador.value = jugador.nombre;
-                listaSugerencias.classList.add("hidden");
+                    window.location.href = `/jugador/${jugador.id}`;
                 });
+
+                listaSugerencias.appendChild(li);
             });
             listaSugerencias.classList.remove("hidden");
             });
@@ -158,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     inputBuscador.addEventListener("blur", () => {
-        setTimeout(() => listaSugerencias.classList.add("hidden"), 200);
+        setTimeout(() => listaSugerencias.classList.add("hidden"), 600);
     });
 
     inputBuscador.addEventListener("focus", () => {
