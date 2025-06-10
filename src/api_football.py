@@ -1,4 +1,4 @@
-from flask import url_for
+from flask import url_for, request
 import requests
 import os
 import json
@@ -363,14 +363,9 @@ def buscar_jugadores_por_nombre(nombre):
 
     return jugadores
 
-def obtener_estadisticas_jugador(nombre):
-    url = 'https://v3.football.api-sports.io/players'
-    params = {
-        'search': nombre,
-        'season': 2023
-    }
-
-    response = requests.get(url, headers=HEADERS, params=params)
+def obtener_estadisticas_jugador_por_id(jugador_id):
+    url = f'https://v3.football.api-sports.io/players?id={jugador_id}&season=2023&league=140'
+    response = requests.get(url, headers=HEADERS)
     data = response.json()
 
     if not data['response']:
@@ -381,13 +376,28 @@ def obtener_estadisticas_jugador(nombre):
 
     return {
         'nombre': jugador['player']['name'],
-        'edad': jugador['player']['age'],
-        'posicion': stats['games']['position'],
-        'equipo': stats['team']['name'],
-        'goles': stats['goals']['total'] or 0,
-        'asistencias': stats['goals']['assists'] or 0,
-        'partidos': stats['games']['appearences'] or 0,
-        'imagen': jugador['player']['photo']
+    'edad': jugador['player']['age'],
+    'posicion': stats['games']['position'],
+    'equipo': stats['team']['name'],
+    'imagen': jugador['player']['photo'],
+
+    'goles': stats['goals']['total'] or 0,
+    'asistencias': stats['goals']['assists'] or 0,
+    'partidos': stats['games']['appearences'] or 0,
+    'minutos': stats['games']['minutes'] or 0,
+    'titular': stats['games']['lineups'] or 0,
+
+    'disparos': stats['shots']['total'] or 0,
+    'disparos_a_puerta': stats['shots']['on'] or 0,
+
+    'pases': stats['passes']['total'] or 0,
+    'precision_pases': stats['passes']['accuracy'] or 0,
+
+    'duelos': stats['duels']['total'] or 0,
+    'duelos_ganados': stats['duels']['won'] or 0,
+
+    'amarillas': stats['cards']['yellow'] or 0,
+    'rojas': stats['cards']['red'] or 0,
     }
 
 def obtener_todos_los_equipos():

@@ -52,15 +52,21 @@
         <h2 class="text-red-600 text-xl font-bold mb-4">Comparador de estadísticas</h2>
 
         <div class="w-full flex space-x-4 relative">
+            <!-- Jugador 1 -->
             <div class="flex-1 flex-col flex items-center space-x-2 px-2 py-1">
                 <label for="jugador1" class="font-semibold whitespace-nowrap">Jugador 1</label>
                 <input type="text" id="jugador1" name="jugador1" placeholder="Jugador 1" autocomplete="off" class="flex-1 border rounded px-4 py-2">
+                <!-- Campo oculto para el ID -->
+                <input type="hidden" id="jugador1_id" name="jugador1_id">
                 <ul id="sugerencias-jugador1" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden w-full z-20"></ul>
             </div>
 
+            <!-- Jugador 2 -->
             <div class="flex-1 flex flex-col items-center space-x-2 px-2 py-1">
                 <label for="jugador2" class="font-semibold whitespace-nowrap">Jugador 2</label>
                 <input type="text" id="jugador2" name="jugador2" placeholder="Jugador 2" autocomplete="off" class="flex-1 border rounded px-3 py-2">
+                <!-- Campo oculto para el ID -->
+                <input type="hidden" id="jugador2_id" name="jugador2_id">
                 <ul id="sugerencias-jugador2" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
             </div>
         </div>
@@ -205,8 +211,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 li.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
                 li.textContent = jugador.nombre;
                 li.addEventListener("mousedown", (e) => {
-                    e.preventDefault(); // evita que se dispare blur antes del click
+                    e.preventDefault();
                     input.value = jugador.nombre;
+                    document.getElementById(`${id}_id`).value = jugador.id;  // Guarda el id
                     lista.classList.add("hidden");
                 });
                 lista.appendChild(li);

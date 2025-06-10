@@ -4,41 +4,68 @@
 
 {% block body %}
 <div class="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
+    <h2 class="text-3xl text-red-600 font-bold mb-10">Comparación de jugadores</h2>
 
-    <h2 class="text-2xl text-red-600 font-bold mb-8">Comparación de jugadores</h2>
+    <div class="bg-white rounded-2xl shadow-md p-6 w-full max-w-6xl overflow-x-auto">
+        <div class="grid grid-cols-3 gap-6 items-start mb-6">
+            
+            <!-- Jugador 1 -->
+            <div class="flex flex-col items-center space-y-2">
+                <img src="{{ jugador1.imagen }}" alt="{{ jugador1.nombre }}" class="w-24 h-24 rounded-full object-cover shadow">
+                <h3 class="text-lg font-semibold">{{ jugador1.nombre }}</h3>
+                <p class="text-sm text-gray-500">{{ jugador1.posicion }} | {{ jugador1.equipo }}</p>
+            </div>
 
-    <div class="bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl grid grid-cols-2 gap-6">
-        
-        <!-- Jugador 1 -->
-        <div class="flex flex-col items-center text-center space-y-4">
-            <img src="{{ jugador1.foto }}" alt="{{ jugador1.nombre }}" class="w-24 h-24 rounded-full shadow object-cover">
-            <h3 class="text-xl font-semibold text-gray-700">{{ jugador1.nombre }}</h3>
+            <!-- Título central -->
+            <div class="flex items-center justify-center">
+                <span class="text-lg font-semibold text-gray-600">vs</span>
+            </div>
 
-            <div class="w-full bg-gray-50 rounded-lg p-4">
-                <p><strong>Goles:</strong> {{ jugador1.goles }}</p>
-                <p><strong>Asistencias:</strong> {{ jugador1.asistencias }}</p>
-                <p><strong>Partidos:</strong> {{ jugador1.partidos }}</p>
-                <p><strong>Posición:</strong> {{ jugador1.posicion }}</p>
-                <p><strong>Equipo:</strong> {{ jugador1.equipo }}</p>
+            <!-- Jugador 2 -->
+            <div class="flex flex-col items-center space-y-2">
+                <img src="{{ jugador2.imagen }}" alt="{{ jugador2.nombre }}" class="w-24 h-24 rounded-full object-cover shadow">
+                <h3 class="text-lg font-semibold">{{ jugador2.nombre }}</h3>
+                <p class="text-sm text-gray-500">{{ jugador2.posicion }} | {{ jugador2.equipo }}</p>
             </div>
         </div>
 
-        <!-- Jugador 2 -->
-        <div class="flex flex-col items-center text-center space-y-4">
-            <img src="{{ jugador2.foto }}" alt="{{ jugador2.nombre }}" class="w-24 h-24 rounded-full shadow object-cover">
-            <h3 class="text-xl font-semibold text-gray-700">{{ jugador2.nombre }}</h3>
-
-            <div class="w-full bg-gray-50 rounded-lg p-4">
-                <p><strong>Goles:</strong> {{ jugador2.goles }}</p>
-                <p><strong>Asistencias:</strong> {{ jugador2.asistencias }}</p>
-                <p><strong>Partidos:</strong> {{ jugador2.partidos }}</p>
-                <p><strong>Posición:</strong> {{ jugador2.posicion }}</p>
-                <p><strong>Equipo:</strong> {{ jugador2.equipo }}</p>
-            </div>
+        <!-- Tabla de comparación -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-center border text-sm rounded overflow-hidden">
+                <thead class="bg-gray-50 text-gray-700">
+                    <tr>
+                        <th class="py-2 px-4 text-left">Estadística</th>
+                        <th class="py-2 px-4">{{ jugador1.nombre }}</th>
+                        <th class="py-2 px-4">{{ jugador2.nombre }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    {% for label, stat1, stat2 in [
+                        ('Goles', jugador1.goles, jugador2.goles),
+                        ('Asistencias', jugador1.asistencias, jugador2.asistencias),
+                        ('Partidos', jugador1.partidos, jugador2.partidos),
+                        ('Minutos jugados', jugador1.minutos, jugador2.minutos),
+                        ('Pases precisos', jugador1.pases, jugador2.pases),
+                        ('Disparos a puerta', jugador1.disparos, jugador2.disparos),
+                        ('Duelos ganados', jugador1.duelos, jugador2.duelos),
+                        ('Tarjetas amarillas', jugador1.amarillas, jugador2.amarillas),
+                        ('Tarjetas rojas', jugador1.rojas, jugador2.rojas)
+                    ] %}
+                    <tr>
+                        <td class="py-2 px-4 text-left font-medium text-gray-600">{{ label }}</td>
+                        <td class="py-2 px-4 {% if stat1 > stat2 %}bg-green-100 font-semibold{% elif stat1 < stat2 %}bg-red-100{% endif %}">
+                            {{ stat1 }}
+                        </td>
+                        <td class="py-2 px-4 {% if stat2 > stat1 %}bg-green-100 font-semibold{% elif stat2 < stat1 %}bg-red-100{% endif %}">
+                            {{ stat2 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-
     </div>
 
-    <a href="/jugadores" class="mt-8 text-red-600 hover:underline text-sm">&larr; Volver</a>
+    <a href="{{url_for('players.jugadores_general')}}" class="mt-8 text-red-600 hover:underline text-sm">&larr; Volver a jugadores</a>
 </div>
 {% endblock %}

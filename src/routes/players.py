@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template, request, redirect, url_fo
 import requests
 import os
 from extensions import mysql
-from api_football import obtener_jugadores_por_equipo, buscar_jugadores_por_nombre, obtener_estadisticas_jugador, obtener_todos_los_equipos, obtener_foto_jugador
+from api_football import obtener_jugadores_por_equipo, buscar_jugadores_por_nombre, obtener_estadisticas_jugador_por_id, obtener_todos_los_equipos, obtener_foto_jugador
 
 API_KEY = os.getenv('API_KEY')
 
@@ -118,14 +118,13 @@ def buscar_jugador():
 
 @players_bp.route('/comparar-jugadores')
 def comparar_jugadores():
-    nombre1 = request.args.get('jugador1')
-    nombre2 = request.args.get('jugador2')
+    id1 = request.args.get('jugador1_id')
+    id2 = request.args.get('jugador2_id')
 
-    if not nombre1 or not nombre2:
-        return redirect(url_for('player.jugadores_general'))  # o muestra un error
+    if not id1 or not id2:
+        return redirect(url_for('player.jugadores_general'))
 
-    jugador1 = obtener_estadisticas_jugador(nombre1)  # Implementa esta función
-    jugador2 = obtener_estadisticas_jugador(nombre2)
-    print(f"Jugador 1: {jugador1}")
-    print(f"Jugador 2: {jugador2}")
+    jugador1 = obtener_estadisticas_jugador_por_id(id1)
+    jugador2 = obtener_estadisticas_jugador_por_id(id2)
+
     return render_template('comparar_jugadores.html', jugador1=jugador1, jugador2=jugador2)
