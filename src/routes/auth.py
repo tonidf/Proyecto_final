@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response
-from models.user import User 
+from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response, g
 from models.entities.modelUser import ModelUser
 from werkzeug.security import check_password_hash
 from forms.login_form import LoginForm
@@ -10,6 +9,8 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if g.user:
+        return redirect(url_for('main.inicio'))
     login_form = LoginForm()
     if login_form.validate_on_submit():
         email = login_form.email.data
@@ -33,6 +34,8 @@ def login():
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    if g.user:
+        return redirect(url_for('main.inicio'))
     form = RegisterForm()
     if form.validate_on_submit():  # Esto valida y comprueba POST
         nombre = form.nombre.data
@@ -54,6 +57,8 @@ def register():
 
 @auth_bp.route('/profile')
 def profile():
+    if g.user:
+        return redirect(url_for('main.inicio'))
     token = request.cookies.get('access_token')
     if not token:
         flash("No estás autenticado")

@@ -3,33 +3,40 @@
 {% block title %}Inicio{% endblock %}
 
 {% block body %}
-    <div 
-        x-data="carousel()" 
-        x-init="start()" 
-        class="absolute top-20 bottom-0 left-0 right-0 z-0">
-        <template x-for="(image, index) in images" :key="index">
-            <div 
-                class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
-                :class="currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'"
-                :style="`background-image: url(${image});`">
-            </div>
-        </template>
-        <div class="absolute inset-0 z-20 bg-black opacity-80"></div>
-    </div>
-    <div class="flex flex-col w-screen items-center justify-evenly relative z-30">
-        <div class=" flex w-screen z-10 justify-center mt-20">
-            <img src="{{ url_for('static', filename='img/laliga_logo.png') }}" alt="LaLiga Logo" class=" z-10 w-44" />
-        </div>
-        <div 
-            class="w-40 relative z-30 mx-auto mt-24 max-w-48 bg-white text-black rounded-lg py-2 flex flex-col items-center shadow-lg hover:bg-red-600 hover:text-white transition-all duration-300 cursor-pointer">
-
-        <!-- Texto o contenido dentro del contenedor -->
-        <a href="{{url_for('partidos.general')}}"><button class="text-2xl font-bold mb-2 text-center">Comenzar</button></a>
-        </div>
-    </div>
+<div 
+    x-data="carousel()" 
+    x-init="start()" 
+    class="absolute top-20 bottom-0 left-0 right-0 z-0">
     
-    <script>
-        function carousel() {
+    <template x-for="(image, index) in images" :key="index">
+        <div 
+            class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
+            :class="currentIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'"
+            :style="`background-image: url(${image});`">
+        </div>
+    </template>
+    
+    <div class="absolute inset-0 z-20 bg-black opacity-80"></div>
+</div>
+
+<div class="flex flex-col w-full items-center justify-evenly relative z-30 min-h-[calc(100vh-5rem)]">
+    
+    <!-- Logo centrado -->
+    <div class="flex justify-center mt-20">
+        <img src="{{ url_for('static', filename='img/laliga_logo.png') }}" alt="LaLiga Logo" class="w-32 sm:w-44" />
+    </div>
+
+    <!-- Botón comenzar -->
+    <div 
+        class="w-40 sm:w-48 mt-16 bg-white text-black rounded-lg py-3 px-4 flex items-center justify-center shadow-lg hover:bg-red-600 hover:text-white transition-all duration-300 cursor-pointer">
+        <a href="{{url_for('partidos.general')}}">
+            <button class="text-lg sm:text-2xl font-bold">Comenzar</button>
+        </a>
+    </div>
+</div>
+
+<script>
+    function carousel() {
         return {
             images: [
                 "{{ url_for('static', filename='img/carrusel_1.webP') }}",
@@ -40,9 +47,9 @@
             start() {
                 setInterval(() => {
                     this.currentIndex = (this.currentIndex + 1) % this.images.length;
-                }, 6000); // cambia cada 6 segundos
+                }, 6000);
             }
         };
-        }
-    </script>
+    }
+</script>
 {% endblock %}

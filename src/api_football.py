@@ -314,6 +314,7 @@ def obtener_jugadores_por_equipo(equipo_id, season=2023):
             break
         
         data = response.json()
+        print("Datos recibidos de la API:", data)  # Para depuración
         jugadores_pagina = data.get('response', [])
         print(json.dumps(data, indent=2))
 

@@ -1,0 +1,13 @@
+{% extends "./layouts/layout.html" %}
+
+{% block title %}Página no encontrada{% endblock %}
+
+{% block body %}
+<div class="text-center mt-20">
+    <h1 class="text-5xl font-bold text-red-600 mb-4">404</h1>
+    <p class="text-xl text-gray-700">Ups... La página que buscas no existe.</p>
+    <a href="{{ url_for('main.inicio') }}" class="mt-6 inline-block bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">
+        Volver al inicio
+    </a>
+</div>
+{% endblock %}

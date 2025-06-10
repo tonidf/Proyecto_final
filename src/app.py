@@ -1,4 +1,4 @@
-from flask import Flask, request, g
+from flask import Flask, request, g, render_template
 from routes import register_routes
 from config import config
 from extensions import mysql
@@ -10,6 +10,10 @@ def create_app():
     app.config.from_object(config["dev"])
 
     mysql.init_app(app)
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template('404.html'), 404
 
     @app.before_request
     def cargar_usuario_actual():

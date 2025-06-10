@@ -1,24 +1,29 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, url_for
 import requests
 import os
+from extensions import mysql
 from api_football import obtener_jugadores_por_equipo, buscar_jugadores_por_nombre, obtener_estadisticas_jugador, obtener_todos_los_equipos, obtener_foto_jugador
 
 API_KEY = os.getenv('API_KEY')
 
 players_bp = Blueprint('players', __name__)
 
+API_ID_A_INTERNO = {
+    529: 1, 530: 2, 531: 3, 532: 4, 533: 5, 534: 6, 536: 7, 538: 8, 541: 9, 542: 10,
+    543: 11, 546: 12, 547: 13, 548: 14, 715: 15, 723: 16, 724: 17, 727: 18, 728: 19,
+    798: 20
+}
 
+# @players_bp.route('/buscar/<nombre>')
+# def buscar_jugador(nombre):
+#     url = "https://v3.football.api-sports.io/players?search={}&season=2023".format(nombre)
+#     headers = {
+#         "x-apisports-key": API_KEY
+#     }
 
-@players_bp.route('/buscar/<nombre>')
-def buscar_jugador(nombre):
-    url = "https://v3.football.api-sports.io/players?search={}&season=2023".format(nombre)
-    headers = {
-        "x-apisports-key": API_KEY
-    }
-
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    return jsonify(data)
+#     response = requests.get(url, headers=headers)
+#     data = response.json()
+#     return jsonify(data)
 
 @players_bp.route('/jugadores/general')
 def jugadores_general(): 
@@ -28,24 +33,32 @@ def jugadores_general():
 
 @players_bp.route('/api/jugadores_top5')
 def jugadores_top5():
-    equipo_id = request.args.get('equipo_id')
-    print("Equipo ID recibido:", equipo_id)
-    if not equipo_id:
+    equipo_api_id = request.args.get('equipo_id')
+    if not equipo_api_id:
         return jsonify([])
 
-    jugadores = obtener_jugadores_por_equipo(equipo_id)  # Devuelve lista de dicts con 'goles' y 'asistencias'
-    print("Jugadores crudos:", jugadores)
-    # Filtrar jugadores que tengan al menos un gol o asistencia
-    jugadores_con_contribuciones = [j for j in jugadores if (j['goles'] + j['asistencias']) > 0]
+    try:
+        equipo_api_id_int = int(equipo_api_id)
+    except ValueError:
+        return jsonify([])
 
-    # Si quieres mostrar solo jugadores con contribuciones, usar la lista filtrada; si quieres incluir todos, usa 'jugadores'
+    equipo_interno_id = API_ID_A_INTERNO.get(equipo_api_id_int)
+    if not equipo_interno_id:
+        return jsonify([])  # No encontrado
+
+    # Aquí usas equipo_api_id_int para llamar a la API externa
+    jugadores = obtener_jugadores_por_equipo(equipo_api_id_int)
+
+    # Luego si quieres filtrar en base a equipo interno, o usar equipo_interno_id en la DB para otros fines
+
+    # Resto del código igual...
+    jugadores_con_contribuciones = [j for j in jugadores if (j['goles'] + j['asistencias']) > 0]
     lista_a_ordenar = jugadores_con_contribuciones if jugadores_con_contribuciones else jugadores
 
-    # Ordenar por suma goles + asistencias descendente
     top5 = sorted(
-    jugadores,
-    key=lambda x: (x['goles'] + x['asistencias']),
-    reverse=True
+        lista_a_ordenar,
+        key=lambda x: (x['goles'] + x['asistencias']),
+        reverse=True
     )[:5]
 
     for jugador in top5:
@@ -57,21 +70,38 @@ def jugadores_top5():
 
     return jsonify(top5)
 
-# @players_bp.route('/buscar_jugadores')
-# def buscar_jugadores():
-#     nombre = request.args.get('nombre', '').strip()
-#     if not nombre or len(nombre) < 2:
-#         return jsonify([])  # No buscamos si menos de 2 letras
 
-#     jugadores = obtener_todos_los_jugadores()  # Tu función para obtener todos los jugadores
 
-#     # Filtrar jugadores que contengan el texto buscado (insensible a mayúsculas)
-#     resultado = [j for j in jugadores if nombre.lower() in j['nombre'].lower()]
 
-#     # Puedes limitar la cantidad de resultados para no saturar
-#     resultado = resultado[:10]
+@players_bp.route('/buscar_jugadores')
+def buscar_jugador():
+    nombre = request.args.get('nombre', '').strip()
+    if len(nombre) < 2:
+        return jsonify([])
 
-#     return jsonify(resultado)
+    url = f"https://v3.football.api-sports.io/players?search={nombre}&season=2023&league=140"
+    headers = {
+        "x-apisports-key": API_KEY
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        return jsonify([])
+
+    data = response.json()
+    print(f"Datos obtenidos: {data}")  # Para depuración
+    jugadores = data.get("response", [])
+
+    nombres_unicos = []
+    ya_vistos = set()
+    for j in jugadores:
+        nombre_jugador = j.get("player", {}).get("name")
+        if nombre_jugador and nombre_jugador not in ya_vistos:
+            nombres_unicos.append({"nombre": nombre_jugador})
+            ya_vistos.add(nombre_jugador)
+
+    return jsonify(nombres_unicos[:10])
 
 @players_bp.route('/comparar-jugadores')
 def comparar_jugadores():
