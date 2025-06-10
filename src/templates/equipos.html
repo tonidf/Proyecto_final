@@ -18,12 +18,6 @@
             <a href="{{url_for('equipos.get_equipo', equipo_id=e[0])}}">
                 <div class="relative group hover:bg-opacity-90 shadow-inner bg-white bg-opacity-20 rounded-xl p-6 mb-4 w-52 h-28 flex items-center justify-center">
                     <img src="{{ e[1] }}" class="group-hover:opacity-100 group-hover:w-24 group-hover:h-24 opacity-40 w-20 h-20 object-contain transition-all duration-300">
-                    <i 
-                    class="{% if e[0] in favoritos %}fas text-yellow-400{% else %}far text-white opacity-20 group-hover:text-black group-hover:opacity-100{% endif %} 
-                            fa-star text-2xl absolute top-2 right-3 cursor-pointer transition-all" 
-                    data-id="{{ e[0] }}" 
-                    onclick="toggleFavoritoEquipo(event)">
-                    </i>
                 </div>
             </a>
             {% endfor %}
@@ -31,36 +25,4 @@
     </div>
 </div>
 
-<script>
-function toggleFavoritoEquipo(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const estrella = event.currentTarget;
-    const equipoId = estrella.dataset.id;
-
-    const esFavorito = estrella.classList.contains('fas');
-    const method = esFavorito ? 'DELETE' : 'POST';
-
-    fetch(`/favoritos/equipo/${equipoId}`, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'same-origin' // importante para que se envíen las cookies
-    })
-    .then(response => {
-        if (response.ok) {
-            // Alternar clases visualmente
-            estrella.classList.toggle('fas');
-            estrella.classList.toggle('far');
-            estrella.classList.toggle('text-yellow-400');
-            estrella.classList.toggle('text-white');
-            estrella.classList.toggle('opacity-20');
-        } else {
-            response.json().then(data => alert(data.message || 'Error'));
-        }
-    });
-}
-</script>
 {% endblock %}
