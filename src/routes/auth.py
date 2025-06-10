@@ -58,7 +58,7 @@ def register():
 @auth_bp.route('/profile')
 def profile():
     if g.user:
-        return redirect(url_for('main.inicio'))
+        return render_template('profile.html', user=g.user)
     token = request.cookies.get('access_token')
     if not token:
         flash("No estás autenticado")

@@ -16,7 +16,7 @@ API_ID_A_INTERNO = {
 
 @players_bp.route('/jugador/<int:jugador_id>')
 def jugador_por_id(jugador_id):
-    url = f"https://v3.football.api-sports.io/players?id={jugador_id}&season=2023"
+    url = f"https://v3.football.api-sports.io/players?id={jugador_id}&season=2023&league=140"
     headers = {
         "x-apisports-key": API_KEY
     }
@@ -28,6 +28,7 @@ def jugador_por_id(jugador_id):
         return render_template("jugador_no_encontrado.html")
 
     jugador = data["response"][0]
+    print(f"Datos del jugador: {jugador}")
     return render_template("jugador_unico.html", jugador=jugador)
 
 @players_bp.route('/jugadores/general')

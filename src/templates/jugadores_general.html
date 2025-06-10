@@ -52,18 +52,17 @@
         <h2 class="text-red-600 text-xl font-bold mb-4">Comparador de estadísticas</h2>
 
         <div class="w-full flex space-x-4 relative">
-        <div class="flex-1">
-            <label for="jugador1" class="block mb-1 font-semibold">Jugador 1</label>
-            <input type="text" id="jugador1" name="jugador1" placeholder="Jugador 1" autocomplete="off"
-            class="w-full border rounded px-3 py-2">
-            <ul id="sugerencias-jugador1" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
-        </div>
-        <div class="flex-1">
-            <label for="jugador2" class="block mb-1 font-semibold">Jugador 2</label>
-            <input type="text" id="jugador2" name="jugador2" placeholder="Jugador 2" autocomplete="off"
-            class="w-full border rounded px-3 py-2">
-            <ul id="sugerencias-jugador2" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
-        </div>
+            <div class="flex-1 flex-col flex items-center space-x-2 px-2 py-1">
+                <label for="jugador1" class="font-semibold whitespace-nowrap">Jugador 1</label>
+                <input type="text" id="jugador1" name="jugador1" placeholder="Jugador 1" autocomplete="off" class="flex-1 border rounded px-4 py-2">
+                <ul id="sugerencias-jugador1" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden w-full z-20"></ul>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center space-x-2 px-2 py-1">
+                <label for="jugador2" class="font-semibold whitespace-nowrap">Jugador 2</label>
+                <input type="text" id="jugador2" name="jugador2" placeholder="Jugador 2" autocomplete="off" class="flex-1 border rounded px-3 py-2">
+                <ul id="sugerencias-jugador2" class="absolute top-full left-0 right-0 bg-white border rounded shadow mt-1 max-h-48 overflow-y-auto hidden z-20"></ul>
+            </div>
         </div>
 
         <button type="submit" class="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition">

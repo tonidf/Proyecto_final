@@ -3,37 +3,91 @@
 {% block title %}Jugador: {{ jugador.player.name }}{% endblock %}
 
 {% block body %}
-<div class="max-w-xl mx-auto p-6 bg-white rounded shadow mt-8">
-    <h1 class="text-3xl font-bold text-red-600 mb-4">{{ jugador.player.name }}</h1>
+<div class="max-w-3xl mx-auto px-6 py-10 bg-white rounded-2xl shadow-lg mt-10">
+    <!-- Nombre del jugador -->
+    <h1 class="text-4xl font-bold text-center text-red-600 mb-6">{{ jugador.player.name }} <span><i class="far fa-star text-center text-black text-3xl"></i></span></h1>
+    
 
-    <div class="flex items-center space-x-4 mb-4">
-        <img src="{{ jugador.player.photo }}" alt="{{ jugador.player.name }}" class="w-24 h-24 rounded-full object-cover shadow" />
-        <div>
-            <p><strong>Edad:</strong> {{ jugador.player.age }}</p>
-            <p><strong>Nacionalidad:</strong> {{ jugador.player.nationality }}</p>
-            <p><strong>Posición:</strong> {{ jugador.statistics[0].games.position }}</p>
-            <p><strong>Equipo:</strong> {{ jugador.statistics[0].team.name }}</p>
+    <!-- Perfil del jugador -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center mb-8">
+        <!-- Foto jugador -->
+        <div class="flex justify-center sm:justify-start">
+            <img src="{{ jugador.player.photo }}" alt="{{ jugador.player.name }}" class="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover shadow-md border-4 border-red-200" />
+        </div>
+
+        <!-- Info básica + bandera + logo equipo -->
+        <div class="sm:col-span-2 space-y-3 text-gray-700 text-base">
+            <p><strong>Edad:</strong> {{ jugador.player.age or "N/D" }}</p>
+
+            <p class="flex items-center gap-2">
+                <strong>Nacionalidad:</strong> {{ jugador.player.nationality or "N/D" }}
+            </p>
+
+            <p><strong>Posición:</strong> {{ jugador.statistics[0].games.position or "N/D" }}</p>
+
+            <p class="flex items-center gap-2">
+                <strong>Equipo:</strong> {{ jugador.statistics[0].team.name or "N/D" }}
+                {% if jugador.statistics[0].team.logo %}
+                <img src="{{ jugador.statistics[0].team.logo }}" alt="{{ jugador.statistics[0].team.name }}" class="w-8 h-8 object-contain rounded" />
+                {% endif %}
+            </p>
         </div>
     </div>
 
-    <h2 class="text-xl font-semibold mb-2">Estadísticas temporada 2023</h2>
-    <table class="w-full border-collapse border border-gray-300">
-        <thead>
-            <tr class="bg-gray-100">
-                <th class="border border-gray-300 px-3 py-1">Partidos</th>
-                <th class="border border-gray-300 px-3 py-1">Goles</th>
-                <th class="border border-gray-300 px-3 py-1">Asistencias</th>
-                <th class="border border-gray-300 px-3 py-1">Minutos</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].games.appearences }}</td>
-                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].goals.total }}</td>
-                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].goals.assists }}</td>
-                <td class="border border-gray-300 px-3 py-1 text-center">{{ jugador.statistics[0].games.minutes }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Estadísticas con scroll vertical -->
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Estadísticas Temporada 2023</h2>
+    
+    <div class="max-h-96 overflow-y-auto border rounded-lg p-4 bg-gray-50 shadow">
+        <div class="flex flex-col space-y-4">
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Partidos</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].games.appearences or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Minutos</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].games.minutes or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Titular</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].games.lineups or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Goles</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].goals.total or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Asistencias</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].goals.assists or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Tiros</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].shots.total or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Al arco</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].shots.on or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Pases</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].passes.total or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Pases clave</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].passes.key or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">Precisión</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].passes.accuracy or '0%' }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">🟨 Amarillas</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].cards.yellow or 0 }}</span>
+            </div>
+            <div class="flex justify-between px-4 py-2 bg-white rounded shadow">
+                <span class="font-semibold">🟥 Rojas</span>
+                <span class="font-bold text-red-600">{{ jugador.statistics[0].cards.red or 0 }}</span>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
